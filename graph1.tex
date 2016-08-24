@@ -1,0 +1,50 @@
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+
+\tikzset{
+    base above/.style={anchor=base, yshift=\pgfkeysvalueof{/pgf/inner ysep}},
+    start/.style={very near start,base above},
+    end/.style={very near end,base above}
+    }
+
+\begin{tikzpicture}
+	\def\dist{1.5}
+	
+	\def\x{0}
+	\node (Z0) at (\dist*\x,0) {$Z_0$};
+
+	\def\x{1}
+	\node (Z1) at (\dist*\x,0) {$Z_1$};
+	\node (b) at (\dist*\x,-\dist) {$b_1$};
+	\node (W) at (\dist*\x,\dist) {$W_1$};
+	\draw[->](b) -- (Z1);
+	\draw[->](W) -- (Z1);
+	
+	\def\x{2}
+	\node (Z2) at (\dist*\x,0) {$Z_2$};
+	\node (b) at (\dist*\x,-\dist) {$b_2$};
+	\node (W) at (\dist*\x,\dist) {$W_2$};
+	\draw[->](b) -- (Z2);
+	\draw[->](W) -- (Z2);
+
+	\def\x{3}
+	\node (Z3) at (\dist*\x,0) {$\cdots$};
+	\node (b) at (\dist*\x,-\dist) {$\cdots$};
+	\node (W) at (\dist*\x,\dist) {$\cdots$};
+
+	\def\x{4}
+	\node (ZL) at (\dist*\x,0) {$Z_L$};
+	\node (b) at (\dist*\x,-\dist) {$b_L$};
+	\node (W) at (\dist*\x,\dist) {$W_L$};
+	\draw[->](b) -- (ZL);
+	\draw[->](W) -- (ZL);
+
+	\def\x{5}
+	\node (J1) at (\dist*\x,0) {$J_1$};
+
+	\draw[->](Z0) -- (Z1);
+	\draw[->](Z1) -- (Z2);
+	\draw[->](Z2) -- (Z3);
+	\draw[->](Z3) -- (ZL);
+	\draw[->](ZL) -- (J1);
+\end{tikzpicture}

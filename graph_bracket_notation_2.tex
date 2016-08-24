@@ -1,0 +1,59 @@
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+
+\tikzset{
+    base above/.style={anchor=base, yshift=\pgfkeysvalueof{/pgf/inner ysep}},   % for "m" VS "p" vertical alignment of labels
+    start/.style={very near start,base above,sloped},
+    end/.style={very near end,base above,sloped}
+    }
+
+\begin{tikzpicture}
+	\begin{scope}
+		\def\scale{3}
+		\node (B) at (0,0) {$B$};
+		\node (W) at (1*\scale,0) {$W$};
+		\node (G) at (0.5*\scale,0.7*\scale) {$G$};
+	
+		\draw (B)--(G)
+			node[start] {$1$}
+			node[end] {$1$};
+		\draw (B)--(W)
+			node[start] {$2$}
+			node[end] {$1$};
+		\draw (W)--(G)
+			node[start] {$2$}
+			node[end] {$\overline 2$};
+	\end{scope}
+
+	\begin{scope}[xshift=12em]
+		\def\scale{3}
+		\node (B) at (0,0) {$B$};
+		\node (W) at (1*\scale,0) {$\color{red}W^T$};
+		\node (G) at (0.5*\scale,0.7*\scale) {$G$};
+	
+		\draw (B)--(G)
+			node[start] {$1$}
+			node[end] {$1$};
+		\draw (B)--(W)
+			node[start] {$2$}
+			node[end] {$\color{red}2$};
+		\draw (W)--(G)
+			node[start] {$\color{red}1$}
+			node[end] {$\overline 2$};
+	\end{scope}
+
+	\begin{scope}[xshift=24em,yshift=4.5em]
+		\def\scale{3}
+		\node (B) at (0,0) {$B$};
+		\node (GW) at (0.8*\scale,0) {$\color{red}GW^T$};
+	
+		\draw (B)--(GW)
+			node[start] {$12$}
+			node[end] {$12$};
+	\end{scope}
+
+	\begin{scope}[xshift=27.5em,yshift=1em]
+		\def\scale{3}
+		\node (B) at (0,0) {$\color{red}B\odot (GW^T)$};
+	\end{scope}
+\end{tikzpicture}

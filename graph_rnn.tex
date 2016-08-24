@@ -1,0 +1,91 @@
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+
+\tikzset{
+    base above/.style={anchor=base, yshift=\pgfkeysvalueof{/pgf/inner ysep}},
+    start/.style={very near start,base above},
+    end/.style={very near end,base above}
+    }
+
+\begin{tikzpicture}
+	\def\xdist{2.5}
+	\def\ydist{1.5}
+	\def\gdist{1.5}
+	
+	\def\x{0}
+	\node (Z0) at (\xdist*\x,0) {$Z_0$};
+
+	\def\x{1}
+	\node (A1) at (\xdist*\x,0) {$A_1$};
+	\node (b) at (\xdist*\x-0.7*\gdist,-0.6*\ydist) {$b_1$};
+	\node (W) at (\xdist*\x-0.3*\gdist,-0.6*\ydist) {$W_1$};
+	\node (U) at (\xdist*\x+0.4*\gdist,-0.6*\ydist) {$U_1$};
+	\node (X) at (\xdist*\x,-\ydist) {$X_1$};
+	\node (O) at (\xdist*\x,+\ydist) {$O_1$};
+	\node (J1) at (\xdist*\x,+2*\ydist) {$J_1$};
+	\node (c) at (\xdist*\x-0.4*\gdist,\ydist-0.6*\ydist) {$c_1$};
+	\node (V) at (\xdist*\x+0.4*\gdist,\ydist-0.6*\ydist) {$V_1$};
+	\draw[->](b) -- (A1);
+	\draw[->](W) -- (A1);
+	\draw[->](U) -- (A1);
+	\draw[->](X) -- (A1);
+	\draw[->](A1) -- (O);
+	\draw[->](c) -- (O);
+	\draw[->](V) -- (O);
+	\draw[->](O) -- (J1);
+	
+	\def\x{2}
+	\node (A2) at (\xdist*\x,0) {$A_2$};
+	\node (b) at (\xdist*\x-0.7*\gdist,-0.6*\ydist) {$b_2$};
+	\node (W) at (\xdist*\x-0.3*\gdist,-0.6*\ydist) {$W_2$};
+	\node (U) at (\xdist*\x+0.4*\gdist,-0.6*\ydist) {$U_2$};
+	\node (X) at (\xdist*\x,-\ydist) {$X_2$};
+	\node (O) at (\xdist*\x,+\ydist) {$O_2$};
+	\node (J2) at (\xdist*\x,+2*\ydist) {$J_2$};
+	\node (c) at (\xdist*\x-0.4*\gdist,\ydist-0.6*\ydist) {$c_2$};
+	\node (V) at (\xdist*\x+0.4*\gdist,\ydist-0.6*\ydist) {$V_2$};
+	\draw[->](b) -- (A2);
+	\draw[->](W) -- (A2);
+	\draw[->](U) -- (A2);
+	\draw[->](X) -- (A2);
+	\draw[->](A2) -- (O);
+	\draw[->](c) -- (O);
+	\draw[->](V) -- (O);
+	\draw[->](O) -- (J2);
+
+	\def\x{3}
+	\node (A3) at (\xdist*\x,0) {$\cdots$};
+	\node (X) at (\xdist*\x,-\ydist) {$\cdots$};
+	\node (O) at (\xdist*\x,\ydist) {$\cdots$};
+	\node (J) at (\xdist*\x,2*\ydist) {$\cdots$};
+
+	\def\x{4}
+	\node (Atau) at (\xdist*\x,0) {$A_\tau$};
+	\node (b) at (\xdist*\x-0.7*\gdist,-0.6*\ydist) {$b_\tau$};
+	\node (W) at (\xdist*\x-0.3*\gdist,-0.6*\ydist) {$W_\tau$};
+	\node (U) at (\xdist*\x+0.4*\gdist,-0.6*\ydist) {$U_\tau$};
+	\node (X) at (\xdist*\x,-\ydist) {$X_\tau$};
+	\node (O) at (\xdist*\x,+\ydist) {$O_\tau$};
+	\node (Jtau) at (\xdist*\x,+2*\ydist) {$J_\tau$};
+	\node (c) at (\xdist*\x-0.4*\gdist,\ydist-0.6*\ydist) {$c_\tau$};
+	\node (V) at (\xdist*\x+0.4*\gdist,\ydist-0.6*\ydist) {$V_\tau$};
+	\draw[->](b) -- (Atau);
+	\draw[->](W) -- (Atau);
+	\draw[->](U) -- (Atau);
+	\draw[->](X) -- (Atau);
+	\draw[->](Atau) -- (O);
+	\draw[->](c) -- (O);
+	\draw[->](V) -- (O);
+	\draw[->](O) -- (Jtau);
+
+	\draw[->](Z0) -- (A1);
+	\draw[->](A1) -- (A2);
+	\draw[->](A2) -- (A3);
+	\draw[->](A3) -- (Atau);
+	
+	\node (J) at (\xdist*2.5,\ydist*3.3) {$J$};
+	\draw[->](J1) -- (J);
+	\draw[->](J2) -- (J);
+	\draw[->](Jtau) -- (J);
+
+\end{tikzpicture}

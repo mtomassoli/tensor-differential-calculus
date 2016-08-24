@@ -1,0 +1,7465 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{url}
+\usepackage{enumitem}
+\end_preamble
+\use_default_options true
+\begin_modules
+enumitem
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 2
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type numerical
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Matrix Differential Calculus with Tensors
+\begin_inset Newline newline
+\end_inset
+
+(for 
+\emph on
+Machine Learning
+\emph default
+)
+\end_layout
+
+\begin_layout Author
+Massimiliano Tomassoli
+\begin_inset Newline newline
+\end_inset
+
+(reverse(
+\emph on
+5102mnhuik
+\emph default
+)@gmail.com)
+\end_layout
+
+\begin_layout Date
+08/21/2016
+\begin_inset Newline newline
+\end_inset
+
+(
+\emph on
+alpha
+\emph default
+ version)
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset FormulaMacro
+\newcommand{\tr}{\mathrm{\mathrm{tr}}}
+{\mathrm{tr}}
+\end_inset
+
+
+\begin_inset FormulaMacro
+\newcommand{\diag}{\mathrm{\mathrm{diag}}}
+{\mathrm{diag}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset FormulaMacro
+\newcommand{\len}{\mathrm{\mathrm{length}}}
+{\mathrm{length}}
+\end_inset
+
+
+\begin_inset FormulaMacro
+\newcommand{\marked}{\mathrm{\mathrm{marked}}}
+{\mathrm{marked}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\myodot}[2]{\prescript{#1}{}\odot^{#2}}
+{^{#1}\odot^{#2}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\mycdot}[2]{\prescript{#1}{}\cdot^{#2}}
+{^{#1}\cdot^{#2}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset FormulaMacro
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+{\mathrm{argmin}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset FormulaMacro
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+{\mathrm{argmax}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset FormulaMacro
+\newcommand{\skipeq}{\hphantom{=\;\:}}
+{\mathrm{\hphantom{=\;\:}}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The goal of this tutorial is to give the reader a deep understanding of
+ 
+\emph on
+Matrix Differential Calculus 
+\emph default
+(MDC) and simplify previous methods by using 
+\emph on
+tensors 
+\emph default
+(i.e.
+ 
+\emph on
+multidimensional arrays
+\emph default
+).
+\end_layout
+
+\begin_layout Standard
+MDC is a specialization of regular calculus for easily differentiating functions
+ which involve matrices and vectors.
+ With MDC, we can compute the gradient of, say, 
+\begin_inset Formula $f(x)=x^{T}Ax$
+\end_inset
+
+ directly without having to deal with the single elements of 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The classic approach to MDC is that by Magnus and Neudecker's
+\begin_inset CommandInset citation
+LatexCommand cite
+key "citeulike:670056"
+
+\end_inset
+
+.
+ For a quick overview you can read a concise introduction I wrote a few
+ years ago
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tomassoli-matcalc"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recently I came across a paper by Pollock
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RePEc:lec:leecon:14/02"
+
+\end_inset
+
+ which claims that MDC is still not well understood by all practitioners
+ and proposes to use a notation (basically, 
+\emph on
+Einstein notation
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "wiki:einstein"
+
+\end_inset
+
+) which reveals the tensor structure of the matrices.
+\end_layout
+
+\begin_layout Standard
+Both approaches rely on the concept of 
+\emph on
+vectorization
+\emph default
+.
+ Basically, we convert matrices into vectors so that we can keep using the
+ usual rules for vectors.
+ While this is undoubtedly a smart move, I think it makes things more complicate
+d than necessary, at least on a conceptual level.
+\end_layout
+
+\begin_layout Standard
+My idea is to get rid of vectorization completely by using full-fledged
+ tensors.
+ One shouldn't need to remember properties about vectorization and the 
+\emph on
+Kronecker 
+\emph default
+operator, or tricks involving the 
+\emph on
+trace 
+\emph default
+operator.
+\end_layout
+
+\begin_layout Standard
+I propose a simple alternative to index notation which I call 
+\emph on
+bracket notation
+\emph default
+, and
+\emph on
+ 
+\emph default
+which, I believe, is more convenient for our goal.
+ Note that I'm not claiming that my approach reduces computations, but just
+ that it makes them more regular and conceptually simpler.
+\end_layout
+
+\begin_layout Standard
+Since I rely exclusively on the community for suggestions and corrections,
+ I warmly welcome any kind of constructive feedback.
+\end_layout
+
+\begin_layout Part
+Theory
+\begin_inset CommandInset label
+LatexCommand label
+name "part:Theory"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Tensors
+\end_layout
+
+\begin_layout Subsection
+Informal introduction
+\end_layout
+
+\begin_layout Standard
+Think of 
+\emph on
+tensors
+\emph default
+ as 
+\emph on
+multidimensional arrays
+\emph default
+.
+ In particular, a 
+\emph on
+scalar
+\emph default
+ is a 0-dimensional tensor, a 
+\emph on
+vector
+\emph default
+ is a 1-dimensional tensor and a 
+\emph on
+matrix
+\emph default
+ is a 2-dimensional tensor.
+ What about 
+\emph on
+row vectors
+\emph default
+ and 
+\emph on
+column vectors
+\emph default
+? Some authors use an 
+\emph on
+index-notation
+\emph default
+ called 
+\emph on
+Einstein notation
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "wiki:einstein"
+
+\end_inset
+
+ where 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is a row vector and 
+\begin_inset Formula $x^{i}$
+\end_inset
+
+ a column vector, or vice versa
+\begin_inset CommandInset citation
+LatexCommand citep
+key "RePEc:lec:leecon:14/02"
+
+\end_inset
+
+, but we'll introduce a different notation which doesn't make this distinction
+ because there's no need to.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be a 3-dimensional array where 
+\begin_inset Formula $A_{ijk}$
+\end_inset
+
+ is the element 
+\begin_inset Formula $A[i,j,k]$
+\end_inset
+
+, 
+\begin_inset Formula $A[i][j][k]$
+\end_inset
+
+ or similar depending on the programming language used.
+ We'll use 
+\begin_inset Formula $e_{ijk}$
+\end_inset
+
+ to indicate a 3-dimensional array whose elements are all 0 except for a
+ single 1 in position 
+\begin_inset Formula $i,j,k$
+\end_inset
+
+.
+ These 
+\begin_inset Formula $e_{ijk}$
+\end_inset
+
+ tensors form the canonical base for 
+\begin_inset Formula $3$
+\end_inset
+
+-dimensional tensors.
+\end_layout
+
+\begin_layout Standard
+If arrays behave analogously to vectors and matrices when multiplied by
+ a scalar, then
+\begin_inset Formula 
+\[
+A=\sum_{i,j,k}A_{ijk}e_{ijk}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is analogous to rewriting a vector 
+\begin_inset Formula $v=(v_{1},\ldots,v_{n})$
+\end_inset
+
+ as
+\begin_inset Formula 
+\[
+v=\sum_{i=1}^{n}v_{i}e_{i}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let's say we have two 2-dimensional arrays, i.e.
+ matrices, 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+A & =\sum_{i,j}A_{ij}e_{ij}\\
+B & =\sum_{l,m}B_{lm}e_{lm}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The product 
+\begin_inset Formula $C=AB$
+\end_inset
+
+ is a matrix whose generic element in position 
+\begin_inset Formula $[i,m]$
+\end_inset
+
+ is equal to 
+\begin_inset Formula $\sum_{k}A_{ik}B_{km}$
+\end_inset
+
+ as dictated by the 
+\emph on
+row-column multiplication rule
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+The product is thus computed as follows:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:1
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ all 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+setlength{
+\backslash
+vspace}{-4pt}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument item:1
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\series bold
+for
+\series default
+ all 
+\begin_inset Formula $m$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+setlength{
+\backslash
+vspace}{0pt}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument item:1
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $C[i,m]=\sum_{k}A_{ik}B_{km}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A more general way to see this is the following:
+\end_layout
+
+\begin_layout Enumerate
+We form
+\begin_inset Formula 
+\[
+M^{1}=A\otimes B=\sum_{i,j,l,m}A_{ij}B_{lm}e_{ijlm},
+\]
+
+\end_inset
+
+which is a 4-dimensional array whose generic element in position 
+\begin_inset Formula $i,j,l,m$
+\end_inset
+
+ is 
+\begin_inset Formula $A_{ij}B_{lm}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+We fuse the second and third dimensions, corresponding to the indices 
+\begin_inset Formula $j$
+\end_inset
+
+ and 
+\begin_inset Formula $l$
+\end_inset
+
+, by performing an 
+\emph on
+element-wise
+\emph default
+ multiplication by walking along the second and third dimensions in parallel:
+\begin_inset Formula 
+\[
+M^{2}=\sum_{i,j,m}A_{ij}B_{jm}e_{ijm}.
+\]
+
+\end_inset
+
+Note that 
+\begin_inset Formula $M^{2}$
+\end_inset
+
+ is a 3-dimensional tensor.
+\end_layout
+
+\begin_layout Enumerate
+Finally, we sum along the second dimension corresponding to the index 
+\begin_inset Formula $j$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+M^{3}=M^{2}.\mathrm{sum}(\mathrm{axis=(2-1)})=\sum_{i,m}\left(\sum_{j}A_{ij}B_{jm}\right)e_{im},
+\]
+
+\end_inset
+
+where we included 
+\emph on
+numpy
+\emph default
+ notation for the same operation (remember that axis is 0-based, which explains
+ the 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $-1$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+).
+ Note that 
+\begin_inset Formula $M^{3}$
+\end_inset
+
+ is exactly 
+\begin_inset Formula $C=AB$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you understand the 
+\begin_inset Formula $e_{ij\cdots}$
+\end_inset
+
+ notation then you should have no problems understanding the 3 steps above.
+\end_layout
+
+\begin_layout Standard
+Let's simplify the notation a little.
+ We'll rewrite the expressions above as
+\begin_inset Formula 
+\begin{align}
+M^{1} & =\left(A_{ij}B_{lm}\middle|ijlm\right)\nonumber \\
+M^{2} & =\left(A_{ij}B_{jm}\middle|ijm\right)\nonumber \\
+M^{3} & =\left(A_{ij}B_{jm}\middle|im\right).\label{eq:M^3}
+\end{align}
+
+\end_inset
+
+Note that 
+\emph on
+repeated indices
+\emph default
+ which don't appear on the right of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\mid$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ are summed over.
+ For instance, 
+\begin_inset Formula $j$
+\end_inset
+
+ is repeated in equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:M^3"
+
+\end_inset
+
+ and doesn't appear on the right of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\mid$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ so equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:M^3"
+
+\end_inset
+
+ is equivalent to
+\begin_inset Formula 
+\[
+M^{3}=\left(\sum_{j}A_{ij}B_{jm}\middle|im\right).
+\]
+
+\end_inset
+
+Note also that the order of the dimensions is indicated by the part on the
+ right of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\mid$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ alone.
+ For instance,
+\begin_inset Formula 
+\[
+\left(A_{ij}B_{jm}\middle|im\right)=\left(B_{jm}A_{ij}\middle|im\right).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Formal definitions
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Formal-definitions"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's define the 3 operations introduced above more formally.
+\end_layout
+
+\begin_layout Standard
+We'll be using the following two tensors:
+\begin_inset Formula 
+\begin{align*}
+A & =(A_{i_{1}i_{2}\cdots i_{N}}\mid i_{1}i_{2}\cdots i_{N})\\
+B & =(B_{j_{1}j_{2}\cdots j_{N}}\mid j_{1}j_{2}\cdots j_{N}).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We define the 
+\emph on
+Kronecker product
+\emph default
+ as
+\begin_inset Formula 
+\[
+A\otimes B=(A_{i_{1}\cdots i_{N}}B_{j_{1}\cdots j_{M}}\mid i_{1}\cdots i_{N}j_{1}\cdots j_{M})
+\]
+
+\end_inset
+
+Note that, in general, 
+\begin_inset Formula $A\otimes B\neq B\otimes A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+As an example, consider the 
+\emph on
+outer product
+\emph default
+ between vectors:
+\begin_inset Formula 
+\[
+vw^{T}=(v_{i}w_{j}\mid ij)=v\otimes w.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+element-wise product 
+\emph default
+is hard to write in general form, so let's consider an example:
+\begin_inset Formula 
+\begin{equation}
+A\myodot{23}{14}B=(A_{i_{1}khi_{4}\cdots i_{N}}B_{kj_{2}j_{3}hj_{5}\cdots j_{M}}\mid i_{1}khi_{4}\cdots i_{N}j_{2}j_{3}j_{5}\cdots j_{M}).\label{eq:elementwise-product-example}
+\end{equation}
+
+\end_inset
+
+In words, the second dimension of 
+\begin_inset Formula $A$
+\end_inset
+
+ is multiplied element-wise by the first dimension of 
+\begin_inset Formula $B$
+\end_inset
+
+ and the third dimension of 
+\begin_inset Formula $A$
+\end_inset
+
+ is multiplied element-wise by the fourth dimension of 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ Note that the positions of the multiplied dimensions in the result are
+ indicated by the numbers on the left of the operator 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $23$
+\end_inset
+
+ in this example.
+\end_layout
+
+\begin_layout Standard
+Let's give a general definition.
+ Let 
+\begin_inset Formula $I=i_{1}\cdots i_{N}$
+\end_inset
+
+ and 
+\begin_inset Formula $J=j_{1}\cdots j_{M}$
+\end_inset
+
+ be lists of indices.
+ In general, if 
+\begin_inset Formula $L=l_{1}\cdots l_{S}$
+\end_inset
+
+ is a list and 
+\begin_inset Formula $P=p_{1}\cdots p_{K}$
+\end_inset
+
+ a list of positions in 
+\begin_inset Formula $\{1,\ldots,S\}$
+\end_inset
+
+ 
+\emph on
+without repetitions
+\emph default
+ (i.e.
+ 
+\begin_inset Formula $p_{i}=p_{j}\iff i=j$
+\end_inset
+
+), then 
+\begin_inset Formula $L[P]$
+\end_inset
+
+ is the sublist selected from 
+\begin_inset Formula $L$
+\end_inset
+
+ by the positions in 
+\begin_inset Formula $P$
+\end_inset
+
+, i.e.,
+\begin_inset Formula 
+\[
+L[P]=l_{p_{1}}l_{p_{2}}\cdots l_{p_{K}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\emph on
+From now on, we'll always assume that lists of positions are 
+\emph default
+without repetitions
+\emph on
+.
+ This simplifies both definitions and results.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $L[P]\leftarrow k_{1}\cdots k_{K}$
+\end_inset
+
+ is the list 
+\begin_inset Formula $L$
+\end_inset
+
+ after the elements at positions 
+\begin_inset Formula $p_{1},\ldots,p_{K}$
+\end_inset
+
+ have been replaced with the elements 
+\begin_inset Formula $k_{1},\ldots,k_{K}$
+\end_inset
+
+, respectively.
+ 
+\begin_inset Formula $Q\setminus R$
+\end_inset
+
+ is the list 
+\begin_inset Formula $Q$
+\end_inset
+
+ without the elements in 
+\begin_inset Formula $R$
+\end_inset
+
+, where the remaining elements have the same relative order as in 
+\begin_inset Formula $Q$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $P$
+\end_inset
+
+ is a list of positions in 
+\begin_inset Formula $\{1,\ldots,S\}$
+\end_inset
+
+, then 
+\begin_inset Formula $-P=(1\cdots S)\setminus P$
+\end_inset
+
+.
+ Therefore, 
+\begin_inset Formula $L[-P]$
+\end_inset
+
+ is the list 
+\begin_inset Formula $L$
+\end_inset
+
+ after the elements at positions 
+\begin_inset Formula $p_{1},\ldots,p_{K}$
+\end_inset
+
+ have been deleted.
+\end_layout
+
+\begin_layout Standard
+With these definitions, example
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:elementwise-product-example"
+
+\end_inset
+
+ can be rewritten as
+\begin_inset Formula 
+\[
+A\myodot{23}{14}B=(A_{I[23]\leftarrow kh}B_{J[14]\leftarrow kh}\mid(I[23]\leftarrow kh)J[-(14)]).
+\]
+
+\end_inset
+
+In general, we have
+\begin_inset Formula 
+\begin{equation}
+A\myodot PQB=(A_{I[P]\leftarrow K}B_{J[Q]\leftarrow K}\mid(I[P]\leftarrow K)J[-Q]),\label{eq:elementwise-product-def}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\len(K)=\len(P)=\len(Q)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+\emph on
+very important 
+\series default
+\emph default
+point to understand is that, in general, 
+\begin_inset Formula $A\myodot PQB$
+\end_inset
+
+ and 
+\begin_inset Formula $B\myodot QPA$
+\end_inset
+
+ are different but they only differ by a permutation of their dimensions.
+ For instance, if 
+\begin_inset Formula $A=(A_{ijk}\mid ijk)$
+\end_inset
+
+ and 
+\begin_inset Formula $B=(B_{lmn}\mid lmn)$
+\end_inset
+
+, then:
+\begin_inset Formula 
+\begin{align}
+A\myodot{12}{32}B & =(A_{ijk}B_{lmn}\mid ijklmn)\rightsquigarrow(A_{ijk}B_{lji}\mid ijkl)\label{eq:non-commutativity-1}\\
+B\myodot{32}{12}A & =(B_{lmn}A_{ijk}\mid lmnijk)\rightsquigarrow(B_{lji}A_{ijk}\mid ljik),\label{eq:non-commutativity-2}
+\end{align}
+
+\end_inset
+
+where 
+\begin_inset Formula $A_{1}\rightsquigarrow\cdots\rightsquigarrow A_{n}=A_{n}$
+\end_inset
+
+, which means that using 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\rightsquigarrow$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ is just a trick to show intermediate steps without losing rigor.
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $W$
+\end_inset
+
+ is an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensor and we want to square each one of its elements, we can
+ compute 
+\begin_inset Formula $W\myodot{1\cdots n}{1\cdots n}W$
+\end_inset
+
+, but this is needlessly verbose, so, as a convention, let's omit the positions
+ when they go from 
+\begin_inset Formula $1$
+\end_inset
+
+ to the last one:
+\begin_inset Formula 
+\[
+W\myodot{1\cdots n}{1\cdots n}W=W\odot W.
+\]
+
+\end_inset
+
+Note that 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ is the usual 
+\emph on
+Hadamard product operator
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "wiki:hadamard"
+
+\end_inset
+
+ generalized to tensors.
+\end_layout
+
+\begin_layout Standard
+We can extend this definition by deciding that if any indices are 
+\emph on
+marked
+\emph default
+ with a 
+\emph on
+bar
+\emph default
+, then the corresponding dimensions will be summed over:
+\begin_inset Formula 
+\[
+A\myodot{\overline{P}Q}{RS}B=(A_{I[PQ]\leftarrow K}B_{J[RS]\leftarrow K}\mid(I[PQ]\leftarrow K)[-P]J[-(RS)]),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $P\cap Q=R\cap S=\emptyset$
+\end_inset
+
+ and 
+\begin_inset Formula $\len(K)=\len(PQ)=\len(RS)$
+\end_inset
+
+.
+ (Note that the point made before about the non commutativity of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ still applies.)
+\end_layout
+
+\begin_layout Standard
+This lets us express the usual matrix product as
+\begin_inset Formula 
+\begin{align*}
+AB & =\left(\sum_{k}A_{ik}B_{km}\middle|im\right)\\
+ & =(A_{ik}B_{km}\mid im)\\
+ & =A\myodot{\overline{2}}1B.
+\end{align*}
+
+\end_inset
+
+The 
+\emph on
+inner product
+\emph default
+ between vectors can be expressed simply as
+\begin_inset Formula 
+\[
+v^{T}w=v\prescript{\overline{1}}{}\odot^{1}w.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If all positions are marked, we can use the 
+\emph on
+dot operator 
+\emph default
+as a shortcut:
+\begin_inset Formula 
+\[
+A\mycdot PQB=A\myodot{\overline{P}}QB.
+\]
+
+\end_inset
+
+Note that the dot operator generalizes the usual 
+\emph on
+dot product
+\emph default
+ (or
+\emph on
+ inner product
+\emph default
+).
+
+\emph on
+ 
+\emph default
+Now we can rewrite the product between matrices as
+\begin_inset Formula 
+\[
+AB=A\myodot{\overline{2}}1B=A\mycdot 21B,
+\]
+
+\end_inset
+
+and the inner product between vectors as
+\begin_inset Formula 
+\[
+v^{T}w=v\cdot w,
+\]
+
+\end_inset
+
+where we used the same convention as before of omitting the positions when
+ they go from 
+\begin_inset Formula $1$
+\end_inset
+
+ to the last one (here there's just one position).
+\end_layout
+
+\begin_layout Standard
+We may define another handy shortcut for 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\cdot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If 
+\begin_inset Formula $X$
+\end_inset
+
+ is an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensor and 
+\begin_inset Formula $Y$
+\end_inset
+
+ an 
+\begin_inset Formula $m$
+\end_inset
+
+-dimensional tensor, then 
+\begin_inset Formula 
+\begin{align*}
+X\myodot{(n-k+1)\cdots n}{1\cdots k}Y & =X\odot_{k}Y\\
+X\mycdot{(n-k+1)\cdots n}{1\cdots k}Y & =X\cdot_{k}Y
+\end{align*}
+
+\end_inset
+
+Now we can write
+\begin_inset Formula 
+\[
+AB=A\myodot{\overline{2}}1B=A\mycdot 21B=A\cdot_{1}B.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There's another useful piece of notation.
+ If 
+\begin_inset Formula $A$
+\end_inset
+
+ is an 
+\begin_inset Formula $N$
+\end_inset
+
+-dimensional tensor and 
+\begin_inset Formula $P=p_{1}\cdots p_{N}$
+\end_inset
+
+ is a permutation of the list 
+\begin_inset Formula $1,2,\ldots,N$
+\end_inset
+
+, then
+\begin_inset Formula 
+\begin{equation}
+A_{P}=\left(A_{i_{1}\cdots i_{N}}\mid i_{p_{1}}i_{p_{2}}\cdots i_{p_{N}}\right).\label{eq:A_p notation}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can extend this notation by enclosing in 
+\emph on
+square brackets
+\emph default
+ dimensions which we want to multiply together element-wise.
+ For instance,
+\begin_inset Formula 
+\[
+A_{p_{1}[p_{2}p_{5}p_{7}]p_{3}[p_{4}p_{6}]p_{8}\cdots}=\left(A_{I[p_{2}p_{5}p_{7}p_{4}p_{6}]\leftarrow kkkhh}\middle|i_{p_{1}}ki_{p_{3}}hi_{p_{8}}\cdots\right).
+\]
+
+\end_inset
+
+This should be clear enough without giving a general definition.
+ As before, we can mark the positions we want to sum over.
+ If some positions are between square brackets together, then the mark must
+ be put only on one of them (it doesn't matter which one).
+ We'll see why later.
+ As an example, consider this:
+\begin_inset Formula 
+\[
+A_{\overline{p_{1}}[p_{2}p_{5}p_{7}]p_{3}[p_{4}\overline{p_{6}}]p_{8}\cdots}=\left(A_{I[p_{2}p_{5}p_{7}p_{4}p_{6}]\leftarrow kkkhh}\middle|ki_{p_{3}}i_{p_{8}}\cdots\right).
+\]
+
+\end_inset
+
+Note that we're summing over 
+\begin_inset Formula $i_{p_{1}}$
+\end_inset
+
+ and 
+\begin_inset Formula $h$
+\end_inset
+
+ (which corresponds to 
+\begin_inset Formula $[p_{4}p_{6}]$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Finally, since this is the subsection of formal definitions, let's introduce
+ a trivial, but handy, piece of notation.
+ Let 
+\begin_inset Formula $\mathbb{T}_{n}$
+\end_inset
+
+ be the set of 
+\emph on
+generic
+\emph default
+ 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensors.
+ By 
+\emph on
+generic
+\emph default
+ we mean that we abstract over the 
+\emph on
+field 
+\emph default
+(e.g.
+ 
+\begin_inset Formula $\mathbb{R}$
+\end_inset
+
+) and the 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+sizes
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ of the dimensions, so we'll write 
+\begin_inset Formula $A\in\mathbb{T}_{n}$
+\end_inset
+
+ instead of 
+\begin_inset Formula $A\in\mathbb{K}^{s_{1}\times\cdots\times s_{n}}$
+\end_inset
+
+ for some field 
+\begin_inset Formula $\mathbb{K}$
+\end_inset
+
+ and sizes 
+\begin_inset Formula $s_{1},\ldots,s_{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+General Bracket Notation
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:General-Bracket-Notation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We've already seen a light version of the 
+\emph on
+bracket notation
+\emph default
+.
+ Instead of giving a rigorous specification of this notation, we'll see
+ simplified definitions and a few examples.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensor.
+ Let's start with a simple equality:
+\begin_inset Formula 
+\begin{align*}
+A & =A_{1\cdots n}=A_{1}A_{2}\cdots A_{n}.
+\end{align*}
+
+\end_inset
+
+Note that this is a generalization of notation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:A_p notation"
+
+\end_inset
+
+.
+ First, 
+\begin_inset Formula $A_{1}$
+\end_inset
+
+ wasn't allowed before because 
+\begin_inset Formula $1$
+\end_inset
+
+ is not a permutation of 
+\begin_inset Formula $1\cdots n$
+\end_inset
+
+, of course.
+ Second, we didn't define what it means to 
+\emph on
+juxtapose
+\emph default
+ two terms like in 
+\begin_inset Formula $A_{1}A_{2}$
+\end_inset
+
+.
+ Conceptually, juxtaposition should be equivalent to the Kronecker operator,
+ but there's an important difference: juxtaposition is a 
+\emph on
+formal
+\emph default
+ Kronecker product.
+ What I mean is that it's just a way to carry out manipulations with portions
+ of a tensor.
+ It is 
+\emph on
+not
+\emph default
+ 
+\emph on
+semantically
+\emph default
+ equivalent to the Kronecker product.
+ For instance, if 
+\begin_inset Formula $u,v,w$
+\end_inset
+
+ are 3 vectors, then
+\begin_inset Formula 
+\begin{equation}
+u\otimes v\otimes w=(u_{i}v_{j}w_{k}\mid ijk)={\color{blue}uvw},\label{eq:uvw_example}
+\end{equation}
+
+\end_inset
+
+while 
+\begin_inset Formula $A_{1}\otimes A_{23}\otimes A_{4}$
+\end_inset
+
+ doesn't mean anything because the portion 
+\begin_inset Formula $A_{5\cdots n}$
+\end_inset
+
+ is completely missing.
+ So what's the point of writing 
+\begin_inset Formula $A_{1}A_{23}A_{4}$
+\end_inset
+
+ in the first place? The point is that it lets us do useful manipulations
+ with the portions of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ The important thing is that no term in the final expression misses any
+ portions of any tensors.
+ We'll see some examples later.
+\end_layout
+
+\begin_layout Standard
+Note that 
+\begin_inset Formula ${\color{blue}uvw}$
+\end_inset
+
+ in example
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:uvw_example"
+
+\end_inset
+
+ is written in 
+\color blue
+blue
+\color inherit
+.
+ We'll write the parts expressed in bracket notation in 
+\color blue
+blue
+\color inherit
+ for more clarity.
+\end_layout
+
+\begin_layout Standard
+Square brackets multiply the dimensions of all the terms within them (all
+ of the same dimension) element-wise:
+\begin_inset Formula 
+\[
+{\color{blue}[A_{P}B_{Q}A_{R}(C_{S}C_{T})]}=A_{P}\odot B_{Q}\odot A_{R}\odot(C_{S}\otimes C_{T}),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\dim({\color{blue}A_{P}})=\dim({\color{blue}B_{Q}})=\dim({\color{blue}A_{R}})=\dim({\color{blue}C_{S}C_{T}})$
+\end_inset
+
+.
+ Note that 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ is also used 
+\emph on
+formally
+\emph default
+ here because the terms are not complete tensors but only portions.
+\end_layout
+
+\begin_layout Standard
+We can reorder the terms withing square brackets however we want, so, in
+ general,
+\begin_inset Formula 
+\[
+{\color{blue}[AB]}={\color{blue}[BA]}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To sum over all the dimensions of a term, it's enough to put a 
+\emph on
+bar
+\emph default
+ on it.
+ For instance,
+\begin_inset Formula 
+\[
+{\color{blue}A_{P}\overline{A_{Q}}A_{R}}
+\]
+
+\end_inset
+
+means that we sum over all the dimensions of 
+\begin_inset Formula $A_{Q}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In a sense, terms with a bar over them become 
+\emph on
+scalars
+\emph default
+ so we can put them wherever we want:
+\begin_inset Formula 
+\[
+{\color{blue}A_{P}\overline{A_{Q}}A_{R}}={\color{blue}\overline{A_{Q}}A_{P}A_{R}}={\color{blue}A_{P}A_{R}\overline{A_{Q}}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can also sum over dimensions represented by pairs of square brackets,
+ of course:
+\begin_inset Formula 
+\[
+{\color{blue}[A_{P}\overline{B_{Q}}A_{R}(C_{S}C_{T})]}={\color{blue}[A_{P}B_{Q}\overline{A_{R}}(C_{S}C_{T})]}={\color{blue}[A_{P}B_{Q}A_{R}\overline{(C_{S}C_{T})}]}.
+\]
+
+\end_inset
+
+Note that we put the bar over just a single term, no matter which one.
+ Why not putting the bar over all the terms then? The idea is that we want
+ to be able to write things like this:
+\begin_inset Formula 
+\[
+{\color{blue}[A_{P}B_{Q}A_{R}(\overline{C_{S}}C_{T})]},
+\]
+
+\end_inset
+
+which means that we only sum over the first 
+\begin_inset Formula $\dim({\color{blue}C_{S}})$
+\end_inset
+
+ dimensions.
+ This may be useful when we take something out:
+\begin_inset Formula 
+\[
+{\color{blue}[\overline{A_{12}}B_{12}(C_{1}D_{1})]D_{2}}={\color{blue}[A_{12}B_{12}(\overline{C_{1}}1)]\cdot_{1}D_{12}}.
+\]
+
+\end_inset
+
+Note that
+\begin_inset Formula 
+\[
+{\color{blue}[A_{12}B_{12}(\overline{C_{1}}1)]}={\color{blue}[\overline{A_{1}}B_{1}C_{1}][A_{2}B_{2}]},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula ${\color{blue}1}$
+\end_inset
+
+ is a vector of all 
+\begin_inset Formula $1$
+\end_inset
+
+.
+ In general, 
+\begin_inset Formula $1_{1\cdots n}$
+\end_inset
+
+ is an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensor of all 
+\begin_inset Formula $1$
+\end_inset
+
+.
+ Feel free to come up with your notation.
+ Maybe you prefer 
+\begin_inset Formula $1_{n}$
+\end_inset
+
+, 
+\begin_inset Formula $1_{1:n}$
+\end_inset
+
+ or even 
+\begin_inset Formula $1_{\#n}$
+\end_inset
+
+ where 
+\begin_inset Quotes eld
+\end_inset
+
+#
+\begin_inset Quotes erd
+\end_inset
+
+ indicates that 
+\begin_inset Formula $n$
+\end_inset
+
+ is a count and not a position.
+\end_layout
+
+\begin_layout Standard
+As before, we can move summed over terms wherever we want:
+\begin_inset Formula 
+\[
+{\color{blue}X[\overline{A}BC]Y}={\color{blue}[\overline{A}BC]XY}={\color{blue}XY[\overline{A}BC]}.
+\]
+
+\end_inset
+
+This holds no matter the 
+\emph on
+nesting level
+\emph default
+:
+\begin_inset Formula 
+\[
+{\color{blue}X[AB(C_{1}[\overline{C_{2}}D_{1}]D_{2})]Y}={\color{blue}[\overline{C_{2}}D_{1}]X[AB(C_{1}D_{2})]Y}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In conclusion, we may say that, for instance,
+\begin_inset Formula 
+\[
+{\color{blue}X[\overline{A}B(C_{1}[\overline{C_{2}}D_{1}]D_{2})]Y}=\begin{cases}
+{\color{blue}XY}\\
+{\color{blue}[\overline{A}B(C_{1}D_{2})]}\\
+{\color{blue}[\overline{C_{2}}D_{1}]}.
+\end{cases}
+\]
+
+\end_inset
+
+Rewriting a formula as a 
+\emph on
+system
+\emph default
+ of formulas may simplify things, because the individual formulas are simpler
+ to parse.
+\end_layout
+
+\begin_layout Standard
+As we said in subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Formal-definitions"
+
+\end_inset
+
+, we need to pay special attention to the order of the dimensions.
+ For instance, let's reconsider equations
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:non-commutativity-1"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:non-commutativity-2"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+A\myodot{12}{32}B & =(A_{ijk}B_{lmn}\mid ijklmn)\rightsquigarrow(A_{ijk}B_{lji}\mid ijkl)\\
+B\myodot{32}{12}A & =(B_{lmn}A_{ijk}\mid lmnijk)\rightsquigarrow(B_{lji}A_{ijk}\mid ljik)
+\end{align*}
+
+\end_inset
+
+With bracket notation, we should proceed as follows:
+\begin_inset Formula 
+\begin{align}
+A\myodot{12}{32}B & ={\color{blue}A}\rightsquigarrow{\color{blue}[A_{1}B_{3}]A_{23}}\rightsquigarrow{\color{blue}[A_{1}B_{3}][A_{2}B_{2}]A_{3}}\rightsquigarrow{\color{blue}[A_{1}B_{3}][A_{2}B_{2}]A_{3}B_{1}}\label{eq:bracket-notation-non-comm-1}\\
+B\myodot{32}{12}A & ={\color{blue}B}\rightsquigarrow{\color{blue}B_{12}[B_{3}A_{1}]}\rightsquigarrow{\color{blue}B_{1}[B_{2}A_{2}][B_{3}A_{1}]}\rightsquigarrow{\color{blue}B_{1}[B_{2}A_{2}][B_{3}A_{1}]A_{3}}\label{eq:bracket-notation-non-comm-2}
+\end{align}
+
+\end_inset
+
+Note that the dimensions of the left operand always appear in increasing
+ order in the result.
+ The 
+\emph on
+free dimensions
+\emph default
+ of the right operand appear also in increasing order in the result, but
+ all at the end.
+\end_layout
+
+\begin_layout Subsubsection
+A remark about vectors
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:A-remark-about-vectors"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While a 
+\begin_inset Formula $1$
+\end_inset
+
+-dimensional tensor has no 
+\begin_inset Quotes eld
+\end_inset
+
+orientation
+\begin_inset Quotes erd
+\end_inset
+
+, vectors can be 
+\emph on
+column vectors
+\emph default
+ or 
+\emph on
+row vectors
+\emph default
+.
+ This may be a problem:
+\begin_inset Formula 
+\begin{equation}
+(\boldsymbol{1}^{T}u)v={\color{blue}[\overline{1}u]v}=\boldsymbol{1}\cdot_{1}{\color{blue}uv}=\boldsymbol{1}\cdot_{1}(uv^{T})\neq\boldsymbol{1}^{T}(uv^{T}).\label{eq:wrong_example}
+\end{equation}
+
+\end_inset
+
+The last step is 
+\emph on
+wrong
+\emph default
+ because it changes the orientation of the vector: 
+\begin_inset Formula $(\boldsymbol{1}^{T}u)v$
+\end_inset
+
+ is a column vector but 
+\begin_inset Formula $\boldsymbol{1}^{T}(uv^{T})$
+\end_inset
+
+ is a row vector.
+\end_layout
+
+\begin_layout Standard
+We can solve this 
+\begin_inset Quotes eld
+\end_inset
+
+problem
+\begin_inset Quotes erd
+\end_inset
+
+ by regarding row vectors as matrices, i.e.
+ 
+\begin_inset Formula $2$
+\end_inset
+
+-di\SpecialChar softhyphen
+men\SpecialChar softhyphen
+sio\SpecialChar softhyphen
+nal tensors.
+ We can keep pretending that column vectors are 
+\begin_inset Formula $1$
+\end_inset
+
+-di\SpecialChar softhyphen
+men\SpecialChar softhyphen
+sio\SpecialChar softhyphen
+nal tensors because their elements lie along the first dimension.
+\end_layout
+
+\begin_layout Standard
+To do so, we can introduce a new symbol, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\iota$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ (iota), to represent a dimension of size 
+\begin_inset Formula ${\color{red}1}$
+\end_inset
+
+ (as in 
+\begin_inset Formula $u^{T}\in\mathbb{R}^{{\color{red}1}\times n}$
+\end_inset
+
+), so, if 
+\begin_inset Formula $u$
+\end_inset
+
+ is a column vector, then
+\begin_inset Formula 
+\[
+u^{T}={\color{blue}\iota u}
+\]
+
+\end_inset
+
+This is useful to remind us that 
+\begin_inset Formula $\boldsymbol{1}\cdot_{1}(uv^{T})=[\overline{1}u]v$
+\end_inset
+
+ is 
+\begin_inset Formula $1$
+\end_inset
+
+-dimensional so it's a column vector.
+ Indeed, there's no 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\iota$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ So here's how to fix example
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:wrong_example"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+(\boldsymbol{1}^{T}u)v & ={\color{blue}[\overline{1}u]v}={\color{blue}v[u\overline{1}]}=vu^{T}\boldsymbol{1}
+\end{align*}
+
+\end_inset
+
+Here's an example of when we need to use 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\iota$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+(\boldsymbol{1}^{T}u)v^{T}=[\overline{1}u]\iota v=\iota[\overline{1}u]v=\iota1\cdot_{1}uv=1^{T}uv^{T}
+\]
+
+\end_inset
+
+which means that we can drop the parentheses, as it should be obvious.
+ We're just checking that things works out, here.
+ Note that we can't drop the parentheses in 
+\begin_inset Formula $(1^{T}u)v$
+\end_inset
+
+, unless we rewrite it as 
+\begin_inset Formula $v(1^{T}u)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Associativity
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\cdot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ are so general, we must pay particular attention to 
+\emph on
+associativity
+\emph default
+.
+ Sometimes it holds, other times it doesn't.
+\end_layout
+
+\begin_layout Standard
+Let's consider 3 matrices 
+\begin_inset Formula $A,B$
+\end_inset
+
+ and 
+\begin_inset Formula $C$
+\end_inset
+
+ and their product
+\begin_inset Formula 
+\[
+A\mycdot 11B\mycdot 11C.
+\]
+
+\end_inset
+
+If we evaluate it from left to right we get
+\begin_inset Formula 
+\begin{align*}
+(A\mycdot 11B)\mycdot 11C & =({\color{blue}[\overline{A_{1}}B_{1}]A_{2}B_{2}})\mycdot 11C\\
+ & ={\color{blue}[\overline{A_{1}}B_{1}][\overline{A_{2}}C_{1}]B_{2}C_{2}},
+\end{align*}
+
+\end_inset
+
+whereas if we evaluate it from right to left we get
+\begin_inset Formula 
+\begin{align*}
+A\mycdot 11(B\mycdot 11C) & =A\mycdot 11({\color{blue}[\overline{B_{1}}C_{1}]B_{2}C_{2}})\\
+ & ={\color{blue}[\overline{B_{1}}C_{1}][\overline{A_{1}}B_{2}]A_{2}C_{2}}.
+\end{align*}
+
+\end_inset
+
+As we can see, we get two different results.
+\end_layout
+
+\begin_layout Standard
+Why is that? The problem is that summing over dimensions changes the positions
+ of the following dimensions.
+\end_layout
+
+\begin_layout Standard
+Let's try with the element-wise product:
+\begin_inset Formula 
+\begin{align*}
+(A\myodot 11B)\myodot 11C & =({\color{blue}[A_{1}B_{1}]A_{2}B_{2}})\myodot 11C\\
+ & ={\color{blue}[A_{1}B_{1}C_{1}]A_{2}B_{2}C_{2}}\\
+A\myodot 11(B\myodot 11C) & =A\myodot 11({\color{blue}[B_{1}C_{1}]B_{2}C_{2}})\\
+ & ={\color{blue}[A_{1}B_{1}C_{1}]A_{2}B_{2}C_{2}}
+\end{align*}
+
+\end_inset
+
+We get the same result.
+ This is not always true, though:
+\begin_inset Formula 
+\begin{align*}
+(A\myodot 21B)\myodot 11C & =({\color{blue}A_{1}[A_{2}B_{1}]B_{2}})\myodot 11C\\
+ & ={\color{blue}[A_{1}C_{1}][A_{2}B_{1}]B_{2}C_{2}}\\
+A\myodot 21(B\myodot 11C) & =A\myodot 21({\color{blue}[B_{1}C_{1}]B_{2}C_{2}})\\
+ & ={\color{blue}A_{1}[A_{2}B_{1}C_{1}]B_{2}C_{2}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Associative Operators
+\end_layout
+
+\begin_layout Standard
+First of all, note that 
+\begin_inset Formula $\otimes$
+\end_inset
+
+ is already associative for the simple reason that it doesn't let us specify
+ indices like the other operators.
+\end_layout
+
+\begin_layout Standard
+Now let's review two variants of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\odot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\cdot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ that we presented in subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Formal-definitions"
+
+\end_inset
+
+ as simple shortcuts but that are actually quite interesting for their associati
+vity.
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $A\in\mathbb{T}_{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $B\in\mathbb{T}_{m}$
+\end_inset
+
+, then:
+\begin_inset Formula 
+\begin{align*}
+A\odot_{k}B & =A\myodot{(n-k+1)\cdots n}{1\cdots k}B\\
+A\cdot_{k}B & =A\mycdot{(n-k+1)\cdots n}{1\cdots k}B
+\end{align*}
+
+\end_inset
+
+In words, these two operators combine the last 
+\begin_inset Formula $k$
+\end_inset
+
+ dimensions of 
+\begin_inset Formula $A$
+\end_inset
+
+ with the first 
+\begin_inset Formula $k$
+\end_inset
+
+ dimensions of 
+\begin_inset Formula $B$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For the two operators to be associative there are some conditions though:
+\begin_inset Formula 
+\begin{align*}
+\mathrm{max(}k,h)\leq\mathrm{dim(B)}\implies & (A\odot_{k}B)\odot_{h}C=A\odot_{k}(B\odot_{h}C)\\
+k+h\leq\mathrm{dim}(B)\implies & (A\cdot_{k}B)\cdot_{h}C=A\cdot_{k}(B\cdot_{h}C)
+\end{align*}
+
+\end_inset
+
+The implication in the first formula is not strictly necessary because if
+ the left part (
+\emph on
+antecedent
+\emph default
+) doesn't hold then the right part (
+\emph on
+consequent
+\emph default
+) doesn't make sense.
+ The second formula says that the left 
+\begin_inset Quotes eld
+\end_inset
+
+portion
+\begin_inset Quotes erd
+\end_inset
+
+ of 
+\begin_inset Formula $B$
+\end_inset
+
+ influenced by 
+\begin_inset Formula $A$
+\end_inset
+
+ 
+\emph on
+must not overlap 
+\emph default
+with the right 
+\begin_inset Quotes eld
+\end_inset
+
+portion
+\begin_inset Quotes erd
+\end_inset
+
+ of 
+\begin_inset Formula $B$
+\end_inset
+
+ influenced by 
+\begin_inset Formula $C$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let's consider the first formula.
+ 
+\begin_inset Formula $A\odot_{k}B$
+\end_inset
+
+ ends with the 
+\begin_inset Formula $m$
+\end_inset
+
+ dimensions of 
+\begin_inset Formula $B$
+\end_inset
+
+, although the first 
+\begin_inset Formula $k$
+\end_inset
+
+ dimensions of 
+\begin_inset Formula $B$
+\end_inset
+
+ are fused with the last 
+\begin_inset Formula $k$
+\end_inset
+
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ Anyway, 
+\begin_inset Formula $C$
+\end_inset
+
+ will fuse exactly with the last 
+\begin_inset Formula $h$
+\end_inset
+
+ dimensions of 
+\begin_inset Formula $B$
+\end_inset
+
+ and, possibly, with some dimensions of 
+\begin_inset Formula $A$
+\end_inset
+
+ which are already fused with the dimensions of 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ Since the fusions of the dimensions at the same position are associative
+ (and commutative), nothing changes if one first computes 
+\begin_inset Formula $B\odot_{h}C$
+\end_inset
+
+ instead.
+\end_layout
+
+\begin_layout Standard
+The second formula is even easier to justify because 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $C$
+\end_inset
+
+ don't interact at all so the order of association is clearly irrelevant.
+\end_layout
+
+\begin_layout Standard
+Note that we also have
+\begin_inset Formula 
+\begin{align*}
+k+h & \leq\mathrm{dim}(B)\implies(A\cdot_{k}B)\odot_{h}C=A\cdot_{k}(B\odot_{h}C)\\
+k+h & \leq\mathrm{dim}(B)\implies(A\odot_{k}B)\cdot_{h}C=A\odot_{k}(B\cdot_{h}C).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, note that, if 
+\begin_inset Formula $d=\dim(U)=\dim(V)$
+\end_inset
+
+, then
+\begin_inset Formula 
+\begin{align*}
+U\odot_{d}V & =U\odot V=V\odot U=V\odot_{d}U\\
+U\cdot_{d}V & =U\cdot V=V\cdot U=V\cdot_{d}U.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Gradients, Jacobians and Differentials
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Gradients,-Jacobians-and"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $f:V\to W$
+\end_inset
+
+ be a differentiable function where 
+\begin_inset Formula $V$
+\end_inset
+
+ and 
+\begin_inset Formula $W$
+\end_inset
+
+ are two 
+\emph on
+Banach Spaces
+\emph default
+, i.e.
+ 
+\emph on
+complete normed vector spaces
+\emph default
+.
+ 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+ is just a particular Banach Space, so you can just assume that 
+\begin_inset Formula $f$
+\end_inset
+
+ goes from 
+\begin_inset Formula $\mathbb{R}^{n}$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbb{R}^{m}$
+\end_inset
+
+, if you want.
+ The 
+\emph on
+differential
+\emph default
+ of 
+\begin_inset Formula $f$
+\end_inset
+
+ at 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is the 
+\emph on
+linear
+\emph default
+ function 
+\begin_inset Formula $df(x_{0};dx)$
+\end_inset
+
+ such that
+\begin_inset Formula 
+\begin{equation}
+f(x_{0}+dx)=f(x_{0})+df(x_{0};dx)+o(dx),\label{eq:diff}
+\end{equation}
+
+\end_inset
+
+which means that 
+\begin_inset Formula $df(x_{0};dx)$
+\end_inset
+
+ is the 
+\emph on
+best linear approximation
+\emph default
+ to the function 
+\begin_inset Formula $dx\mapsto f(x_{0}+dx)-f(x_{0})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $df(x_{0};dx)$
+\end_inset
+
+ is linear, we can rewrite equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diff"
+
+\end_inset
+
+ as
+\begin_inset Formula 
+\[
+f(x_{0}+dx)=f(x_{0})+||dx||df\left(x_{0};\frac{dx}{||dx||}\right)+o(dx),
+\]
+
+\end_inset
+
+which will be useful later.
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $V$
+\end_inset
+
+ and 
+\begin_inset Formula $W$
+\end_inset
+
+ are finite-dimensional then the differential can be expressed as 
+\begin_inset Formula $Adx$
+\end_inset
+
+ where 
+\begin_inset Formula $A$
+\end_inset
+
+ is the 
+\emph on
+Jacobian
+\emph default
+ of 
+\begin_inset Formula $f$
+\end_inset
+
+ at 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A function 
+\begin_inset Formula $f:\mathbb{R}^{n_{1}\times\cdots\times n_{N}}\to\mathbb{R}^{m_{1}\times\cdots\times m_{M}}$
+\end_inset
+
+, i.e.
+ a function from an 
+\begin_inset Formula $N$
+\end_inset
+
+-dimensional array to an 
+\begin_inset Formula $M$
+\end_inset
+
+-dimensional array is still a function from a vector space to another.
+ We just need to choose appropriate 
+\emph on
+bases
+\emph default
+ for the two vector spaces.
+ The 
+\emph on
+one-hot
+\emph default
+ arrays 
+\begin_inset Formula $e_{j_{1}j_{2}\cdots j_{N}}$
+\end_inset
+
+ we defined before form the canonical basis for 
+\begin_inset Formula $\mathbb{R}^{n_{1}\times\cdots\times n_{N}}$
+\end_inset
+
+.
+ Many authors, to simplify things, 
+\emph on
+vectorize
+\emph default
+ the matrices and arrays so that they can be treated as vectors.
+ We'll work 
+\emph on
+directly
+\emph default
+ with the arrays instead.
+\end_layout
+
+\begin_layout Standard
+As applied mathematicians, we're not very interested in all the theory about
+ 
+\emph on
+Fréchet derivatives 
+\emph default
+and Banach Spaces.
+ We just want a way to 
+\emph on
+compute
+\emph default
+ and then 
+\emph on
+retrieve
+\emph default
+ all the 
+\emph on
+partial derivatives
+\begin_inset Formula 
+\[
+\frac{\partial f_{i_{1}i_{2}\cdots i_{M}}}{\partial x_{j_{1}j_{2}\cdots j_{N}}}.
+\]
+
+\end_inset
+
+
+\emph default
+For 
+\begin_inset Formula $M=N=1$
+\end_inset
+
+ we have the usual Jacobian we all know from 
+\emph on
+Multivariate Calculus.
+\end_layout
+
+\begin_layout Standard
+The interesting thing about the differential 
+\begin_inset Formula $df(x_{0};dx)$
+\end_inset
+
+ is that it can be rewritten as follows:
+\begin_inset Formula 
+\[
+df(x_{0};dx)_{I}=\sum_{J}\frac{\partial f_{I}(x_{0})}{\partial x_{J}}dx_{J},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $I=i_{1}\cdots i_{M}$
+\end_inset
+
+, 
+\begin_inset Formula $J=j_{1}\cdots j_{N}$
+\end_inset
+
+, and 
+\begin_inset Formula $f_{I}(x_{0})$
+\end_inset
+
+ is really 
+\begin_inset Formula $f(x_{0}){}_{I}$
+\end_inset
+
+.
+ This implies the following identity:
+\begin_inset Formula 
+\begin{equation}
+df(x_{0};e_{J})_{I}=\frac{\partial f_{I}(x_{0})}{\partial x_{J}}=\frac{\partial f(x_{0})_{I}}{\partial x_{J}}.\label{eq:df_and_partials_def}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's see a few easy examples.
+ For a function 
+\begin_inset Formula $f:\mathbb{R\to\mathbb{R}}$
+\end_inset
+
+ we get
+\begin_inset Formula 
+\[
+df(x_{0};dx)=\frac{df}{dx}dx,
+\]
+
+\end_inset
+
+so the coefficient of 
+\begin_inset Formula $dx$
+\end_inset
+
+ is the derivative 
+\begin_inset Formula $f'(x_{0})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For a function 
+\begin_inset Formula $f:\mathbb{R}^{n}\to\mathbb{R}$
+\end_inset
+
+ we get something slightly more complex:
+\begin_inset Formula 
+\[
+df(x_{0};dx)=\sum_{j=1}^{n}\frac{\partial f}{\partial x_{j}}dx_{j}.
+\]
+
+\end_inset
+
+Analogously to before, the coefficient of 
+\begin_inset Formula $dx_{i}$
+\end_inset
+
+ is the partial derivative 
+\begin_inset Formula $f_{x_{i}}(x_{0})$
+\end_inset
+
+.
+ Note that we don't care about whether the partial derivatives form a column
+ vector (the gradient) or a row vector (the Jacobian).
+ What's important is that 
+\begin_inset Formula $dx$
+\end_inset
+
+ tells us exactly how the partial derivatives are laid out.
+\end_layout
+
+\begin_layout Standard
+For a function 
+\begin_inset Formula $f:\mathbb{R}^{n}\to\mathbb{R}^{m}$
+\end_inset
+
+, where 
+\begin_inset Formula $f=(f_{1},\ldots f_{m})$
+\end_inset
+
+, we get
+\begin_inset Formula 
+\[
+df(x_{0};dx)_{i}=\sum_{j=1}^{n}\frac{\partial f_{i}}{\partial x_{j}}dx_{j}
+\]
+
+\end_inset
+
+which can also be written as
+\begin_inset Formula 
+\begin{align*}
+df(x_{0};dx) & =\sum_{j=1}^{n}dx_{j}\frac{\partial f}{\partial x_{j}}\\
+ & =\sum_{j=1}^{n}dx_{j}\left(\frac{\partial f_{1}}{\partial x_{j}},\ldots,\frac{\partial f_{m}}{\partial x_{j}}\right).
+\end{align*}
+
+\end_inset
+
+In matrix form, this becomes
+\begin_inset Formula 
+\[
+df(x_{0};dx)=Mdx=\sum_{j=1}^{n}dx_{j}M_{\cdot j}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $M$
+\end_inset
+
+ is the Jacobian matrix and 
+\begin_inset Formula $M_{\cdot j}$
+\end_inset
+
+ is the 
+\begin_inset Formula $j$
+\end_inset
+
+-th column of 
+\begin_inset Formula $M$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now, let's consider 
+\begin_inset Formula $f:\mathbb{R}^{n_{1}\times n_{2}\times n_{3}}\to\mathbb{R}$
+\end_inset
+
+, i.e.
+ a function from a 3-dimensional array to a scalar.
+ Here's the differential:
+\begin_inset Formula 
+\begin{align*}
+df(x_{0};dx) & =M\cdot dx\\
+ & =M\prescript{123}{}\cdot^{123}dx\\
+ & =\sum_{i_{1}=1}^{n_{1}}\sum_{i_{2}=1}^{n_{2}}\sum_{i_{3}=1}^{n_{3}}M_{i_{1}i_{2}i_{3}}dx_{i_{1}i_{2}i_{3}}.
+\end{align*}
+
+\end_inset
+
+What's 
+\begin_inset Formula $M$
+\end_inset
+
+? A gradient? It would be if we had vectorized 
+\begin_inset Formula $M$
+\end_inset
+
+, but we didn't.
+ We don't care about what's 
+\begin_inset Formula $M$
+\end_inset
+
+, because 
+\begin_inset Formula $dx$
+\end_inset
+
+ tells us how the partial derivatives are laid out.
+\end_layout
+
+\begin_layout Standard
+The general case is that of a function 
+\begin_inset Formula $\mathbb{T}_{N}\to\mathbb{T}_{M}$
+\end_inset
+
+.
+ For instance, let's consider 
+\begin_inset Formula $f:\mathbb{R}^{n_{1}\times n_{2}\times n_{3}}\to\mathbb{R}^{m_{1}\times m_{2}}$
+\end_inset
+
+ which gives
+\begin_inset Formula 
+\begin{equation}
+df(x_{0};dx)=M\mycdot{345}{123}dx=M\cdot_{3}dx\label{eq:diff_example_1}
+\end{equation}
+
+\end_inset
+
+ or
+\begin_inset Formula 
+\begin{equation}
+df(x_{0};dx)=M\mycdot{512}{123}dx\label{eq:diff_example_2}
+\end{equation}
+
+\end_inset
+
+or something like that.
+ Note that 
+\begin_inset Formula $M$
+\end_inset
+
+ has 5 dimensions.
+ The term 
+\begin_inset Formula $dx$
+\end_inset
+
+ tells us exactly where the partial derivatives are.
+ For instance, equality
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diff_example_2"
+
+\end_inset
+
+ tells us that
+\begin_inset Formula 
+\[
+\frac{\partial f_{ij}}{\partial x_{p_{1}p_{2}p_{3}}}=M_{p_{2}p_{3}ijp_{1}}.
+\]
+
+\end_inset
+
+This can be verified by remembering identity
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:df_and_partials_def"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+\frac{\partial f_{ij}}{\partial x_{p_{1}p_{2}p_{3}}} & =df(x_{0};e_{p_{1}p_{2}p_{3}})_{ij}\\
+ & =\left[M\mycdot{512}{123}e_{p_{1}p_{2}p_{3}}\right]_{ij}\\
+ & =\left[M_{p_{2}p_{3}\cdot\cdot p_{1}}\right]_{ij}\\
+ & =M_{p_{2}p_{3}ijp_{1}}.
+\end{align*}
+
+\end_inset
+
+If you really want to thoroughly understand this derivation, skip ahead,
+ read subsections
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Partial-Indices"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Useful-manipulations"
+
+\end_inset
+
+, and then come back, but I wouldn't worry too much about this example for
+ now.
+\end_layout
+
+\begin_layout Standard
+In practice, it's more convenient to permute the dimensions of 
+\begin_inset Formula $M$
+\end_inset
+
+ so that the differential can be expressed as in equality
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diff_example_1"
+
+\end_inset
+
+.
+ In that case, we get
+\begin_inset Formula 
+\[
+\frac{\partial f_{ij}}{\partial x_{pqr}}=M_{ijpqr},
+\]
+
+\end_inset
+
+which should remind us of the usual Jacobian 
+\begin_inset Formula $J$
+\end_inset
+
+ where
+\begin_inset Formula 
+\[
+\frac{\partial f_{i}}{\partial x_{p}}=J_{ip}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Differentials VS derivatives
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Differentials-VS-derivatives"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $f,g$
+\end_inset
+
+ be two vector functions and 
+\begin_inset Formula $h=g\circ f$
+\end_inset
+
+ their composition.
+ We know that the derivative of 
+\begin_inset Formula $h$
+\end_inset
+
+ at 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is
+\begin_inset Formula 
+\[
+D_{h}(x_{0})=D_{g}(f(x_{0}))D_{f}(x_{0}),
+\]
+
+\end_inset
+
+or, if 
+\begin_inset Formula $x=x_{0}$
+\end_inset
+
+, 
+\begin_inset Formula $f=f(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $g=g(f)$
+\end_inset
+
+, 
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial g}{\partial x}=\frac{\partial g}{\partial f}\frac{\partial f}{\partial x}\label{eq:chain_rule}
+\end{equation}
+
+\end_inset
+
+which suggests that the two 
+\begin_inset Formula $\partial f$
+\end_inset
+
+ cancel out, some say, as if the two factors were real fractions.
+ This is not the right way to look at it, though.
+ They don't cancel out: they 
+\emph on
+contract
+\emph default
+.
+ Let's rewrite equality
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:chain_rule"
+
+\end_inset
+
+ as
+\begin_inset Formula 
+\[
+\frac{\partial g}{\partial x^{T}}=\frac{\partial g}{\partial f^{T}}\frac{\partial f}{\partial x^{T}}
+\]
+
+\end_inset
+
+so to emphasize that the numerator varies vertically (along the columns)
+ and the denominator horizontally (along the rows).
+ Because of the 
+\emph on
+row-by-column multiplication
+\emph default
+ between matrices, we see that, in a way, the denominator of the first factor
+ is multiplied element-wise with the numerator of the second factor and
+ then the resulting dimension is summed over.
+ More explicitly
+\begin_inset Formula 
+\[
+\frac{\partial g}{\partial x^{T}}=\frac{\partial g}{\partial f^{T}}\prescript{2}{}\cdot^{1}\frac{\partial f}{\partial x^{T}}.
+\]
+
+\end_inset
+
+The fact that the denominator is transposed tells us that it varies along
+ the second dimension.
+\end_layout
+
+\begin_layout Standard
+Now let's take two functions 
+\begin_inset Formula $f:\mathbb{R}^{n_{1}\times n_{2}\times n_{3}}\to\mathbb{R}^{m_{1}\times m_{2}}$
+\end_inset
+
+ and 
+\begin_inset Formula $g:\mathbb{R}^{m_{1}\times m_{2}}\to\mathbb{R}^{l_{1}}$
+\end_inset
+
+ and let their differentials be 
+\begin_inset Formula 
+\begin{align*}
+df & =M_{f}\prescript{345}{}\cdot^{123}dx\\
+dg & =M_{g}\prescript{13}{}\cdot^{12}df.
+\end{align*}
+
+\end_inset
+
+Note that 
+\begin_inset Formula $M_{f}$
+\end_inset
+
+ has 
+\begin_inset Formula $3+2=5$
+\end_inset
+
+ dimensions while 
+\begin_inset Formula $M_{g}$
+\end_inset
+
+ has 
+\begin_inset Formula $2+1=3$
+\end_inset
+
+ dimensions.
+ The two derivatives appear to be 
+\begin_inset Formula $M_{f}$
+\end_inset
+
+ and 
+\begin_inset Formula $M_{g}$
+\end_inset
+
+, but how do we multiply them to give 
+\begin_inset Formula $M_{g\circ f}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+The beauty of differentials is that they tell us exactly how we can combine
+ them.
+ Instead of simply multiplying derivatives according  to some arbitrary
+ convention about their structure, we can just combine differentials by
+ 
+\emph on
+substitution
+\emph default
+:
+\begin_inset Formula 
+\begin{align*}
+dg & =M_{g}\prescript{13}{}\cdot^{12}df\\
+ & =M_{g}\prescript{13}{}\cdot^{12}(M_{f}\prescript{345}{}\cdot^{123}dx)\\
+ & =(M_{g}\prescript{13}{}\cdot^{12}M_{f})\prescript{345}{}\cdot^{123}dx.
+\end{align*}
+
+\end_inset
+
+Note that the associativity holds because the left and the right operators
+ influence non-overlapping portions of 
+\begin_inset Formula $M_{f}$
+\end_inset
+
+ (dimensions 
+\begin_inset Formula $1,2$
+\end_inset
+
+ and 
+\begin_inset Formula $3,4,5$
+\end_inset
+
+, respectively).
+\end_layout
+
+\begin_layout Standard
+In Machine Learning, we often need to compute the gradient of a 
+\emph on
+loss function
+\emph default
+ with respect to some parameters.
+ In general, if
+\begin_inset Formula 
+\[
+df=A\cdot dW=\sum_{i_{1}\cdots i_{N}}A_{i_{1}\cdots i_{N}}dW_{i_{1}\cdots i_{N}},
+\]
+
+\end_inset
+
+then 
+\begin_inset Formula $A$
+\end_inset
+
+ is the 
+\begin_inset Quotes eld
+\end_inset
+
+gradient
+\begin_inset Quotes erd
+\end_inset
+
+ of 
+\begin_inset Formula $f$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $W$
+\end_inset
+
+.
+ Gradient is written between quotation marks because 
+\begin_inset Formula $W$
+\end_inset
+
+ is not a vector but a full tensor.
+\end_layout
+
+\begin_layout Standard
+If you want, you can also use the symbol 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\partial$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ instead of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\partial f=A\cdot\partial W.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can also compute the gradients of multiple parameters all at once:
+\begin_inset Formula 
+\[
+df=A_{1}\cdot dW_{1}+\cdots+A_{k}\cdot dW_{k}\implies\nabla_{W_{i}}f=A_{i},\qquad i=1,\ldots,k.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Useful rules about differentials
+\end_layout
+
+\begin_layout Subsection
+A few general results
+\end_layout
+
+\begin_layout Standard
+Before proceeding, let's decide that the 
+\begin_inset Formula $d\cdot$
+\end_inset
+
+ operator binds stronger than any other operator, so that we can just write
+ 
+\begin_inset Formula $dX^{T}$
+\end_inset
+
+ instead of 
+\begin_inset Formula $(dX)^{T}$
+\end_inset
+
+ without any ambiguity.
+\end_layout
+
+\begin_layout Standard
+As we said in section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Gradients,-Jacobians-and"
+
+\end_inset
+
+, if 
+\begin_inset Formula $f$
+\end_inset
+
+ and 
+\begin_inset Formula $g$
+\end_inset
+
+ are differentiable, then
+\begin_inset Formula 
+\begin{align*}
+f(x_{0}+dx) & =f(x_{0})+df(x_{0};dx)+o(dx)\\
+g(x_{0}+dx) & =g(x_{0})+dg(x_{0};dx)+o(dx),
+\end{align*}
+
+\end_inset
+
+which lets us derive a few simple rules about differentials and the 
+\begin_inset Formula $d\cdot$
+\end_inset
+
+ operator in particular.
+\end_layout
+
+\begin_layout Standard
+First of all, 
+\begin_inset Formula $d\cdot$
+\end_inset
+
+ is 
+\emph on
+linear
+\emph default
+, i.e.
+ 
+\begin_inset Formula $d(af+g)=ad(f)+d(g)$
+\end_inset
+
+, where 
+\begin_inset Formula $a$
+\end_inset
+
+ is a scalar:
+\begin_inset Formula 
+\begin{align*}
+(af+g)(x_{0}+dx) & =af(x_{0}+dx)+g(x_{0}+dx)\\
+ & =a(f(x_{0})+df(x_{0};dx)+o(dx))+\\
+ & \skipeq g(x_{0})+dg(x_{0};dx)+o(dx)\\
+ & =(af+g)(x_{0})+\left[adf(x_{0};dx)+dg(x_{0};dx)\right]+o(dx).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Second, 
+\begin_inset Formula $d(fg)=dfg+fdg$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+(fg)(x_{0}+dx) & =f(x_{0}+dx)g(x_{0}+dx)\\
+ & =[f(x_{0})+df(x_{0};dx)+o(dx)][g(x_{0})+dg(x_{0};dx)+o(dx)]\\
+ & =f(x_{0})g(x_{0})+df(x_{0};dx)g(x_{0})+f(x_{0})dg(x_{0};dx)+\\
+ & \skipeq df(x_{0};dx)dg(x_{0};dx)+\\
+ & \skipeq o(dx)[f(x_{0})+df(x_{0};dx)+g(x_{0})+dg(x_{0};dx)]+o(dx^{2})\\
+ & =f(x_{0})g(x_{0})+df(x_{0};dx)g(x_{0})+f(x_{0})dg(x_{0};dx)+\\
+ & \skipeq||dx||^{2}df\left(x_{0};\frac{dx}{||dx||}\right)dg\left(x_{0};\frac{dx}{||dx||}\right)+\\
+ & \skipeq o(dx)[f(x_{0})+df(x_{0};dx)+g(x_{0})+dg(x_{0};dx)]+o(dx^{2})\\
+ & =f(x_{0})g(x_{0})+[df(x_{0};dx)g(x_{0})+f(x_{0})dg(x_{0};dx)]+o(dx).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Third, 
+\begin_inset Formula $dg(x_{0};dx)=dg(f(x_{0});df(x_{0};dx))$
+\end_inset
+
+.
+ This just means what we said in subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Differentials-VS-derivatives"
+
+\end_inset
+
+ about substitutions, i.e.
+ that if
+\begin_inset Formula 
+\begin{align*}
+df & =F(dx)\\
+dg & =G(df),
+\end{align*}
+
+\end_inset
+
+then
+\begin_inset Formula 
+\[
+dg=G(df)=G(F(dx)).
+\]
+
+\end_inset
+
+That's it: simple substitution!
+\end_layout
+
+\begin_layout Standard
+Let's prove it:
+\begin_inset Formula 
+\begin{align*}
+(g\circ f)(x_{0}+dx) & =g(f(x_{0}+dx))\\
+ & =g(f(x_{0})+df(x_{0};dx)+o(dx))\\
+ & =g(f(x_{0})+[df(x_{0};dx)+o(dx)])\\
+ & =g(f(x_{0}))+dg(f(x_{0});[df(x_{0};dx)+o(dx)])+\\
+ & \skipeq o([df(x_{0};dx)+o(dx)])\\
+ & =g(f(x_{0}))+dg(f(x_{0});df(x_{0};dx))+dg(f(x_{0});o(dx))+\\
+ & \skipeq o(df(x_{0};dx))+o(dx^{2})\\
+ & =g(f(x_{0}))+dg(f(x_{0});df(x_{0};dx))+o(dx).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These results hold for all our tensor operators for the simple reason that
+ the derivations above use only properties shared by all our operators (basicall
+y, 
+\emph on
+distributivity
+\emph default
+ with respect to addition).
+\end_layout
+
+\begin_layout Standard
+Another useful result is that
+\begin_inset Formula 
+\[
+d(X_{P})=(dX)_{P},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $X\mapsto X_{P}$
+\end_inset
+
+ is any operation which rearranges the elements or dimensions of 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ For instance, 
+\begin_inset Formula $d(X^{T})=dX^{T}$
+\end_inset
+
+ and, if 
+\begin_inset Formula $Y$
+\end_inset
+
+ is a 
+\begin_inset Formula $3$
+\end_inset
+
+-dimensional tensor, 
+\begin_inset Formula $d(Y_{312})=dY_{312}$
+\end_inset
+
+.
+ Remember that 
+\begin_inset Formula $d\cdot$
+\end_inset
+
+ binds stronger than any other operator, so 
+\begin_inset Formula $dX_{P}=(dX)_{P}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Differentiation in General Bracket Notation
+\end_layout
+
+\begin_layout Standard
+In general, if 
+\begin_inset Formula $B(X,\ldots,X)$
+\end_inset
+
+ is a term in bracket notation where 
+\begin_inset Formula $X$
+\end_inset
+
+ appears one or more times (in any order or split into portions), then the
+ differential of 
+\begin_inset Formula $B$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $X$
+\end_inset
+
+ is
+\begin_inset Formula 
+\begin{align*}
+d(B(X,X,\ldots,X)) & =B(dX,X,\ldots,X)+B(X,dX,\ldots,X)+\cdots+\\
+ & \skipeq B(X,X,\ldots,dX).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For example, let 
+\begin_inset Formula $X$
+\end_inset
+
+ be a 
+\begin_inset Formula $3$
+\end_inset
+
+-dimensional tensor and
+\begin_inset Formula 
+\[
+B(X,X,X)={\color{blue}A_{1}X[X_{2}A_{2}]X_{3}[X_{1}C_{2}]C_{1}DX_{23}[\overline{X_{1}}C_{3}]}.
+\]
+
+\end_inset
+
+ Then
+\begin_inset Formula 
+\begin{align*}
+dB & =d({\color{blue}A_{1}X[X_{2}A_{2}]X_{3}[X_{1}C_{2}]C_{1}DX_{23}[\overline{X_{1}}C_{3}]})\\
+ & ={\color{blue}A_{1}\boldsymbol{dX}[X_{2}A_{2}]X_{3}[X_{1}C_{2}]C_{1}DX_{23}[\overline{X_{1}}C_{3}]}+\\
+ & \skipeq{\color{blue}A_{1}X[\boldsymbol{dX_{2}}A_{2}]\boldsymbol{dX_{3}}[\boldsymbol{dX_{1}}C_{2}]C_{1}DX_{23}[\overline{X_{1}}C_{3}]}+\\
+ & \skipeq{\color{blue}A_{1}X[X_{2}A_{2}]X_{3}[X_{1}C_{2}]C_{1}D\boldsymbol{dX_{23}}[\overline{\boldsymbol{dX_{1}}}C_{3}]}\\
+ & ={\color{blue}A_{1}\boldsymbol{dX}[X_{2}A_{2}]X_{3}[X_{1}C_{2}]C_{1}DX_{23}[\overline{X_{1}}C_{3}]}+\\
+ & \skipeq{\color{blue}A_{1}X[X_{2}A_{2}]X_{3}[\boldsymbol{dX_{1}}C_{2}]C_{1}D\boldsymbol{dX_{23}}[\overline{X_{1}}C_{3}]}+\\
+ & \skipeq{\color{blue}A_{1}X[\boldsymbol{dX_{2}}A_{2}]\boldsymbol{dX_{3}}[X_{1}C_{2}]C_{1}DX_{23}[\overline{\boldsymbol{dX_{1}}}C_{3}]}.
+\end{align*}
+
+\end_inset
+
+As you can see, we can select any portions of 
+\begin_inset Formula $X$
+\end_inset
+
+ we want as long as any portion of 
+\begin_inset Formula $X$
+\end_inset
+
+ in 
+\begin_inset Formula $B$
+\end_inset
+
+ is selected 
+\emph on
+exactly once
+\emph default
+ and each addend contains 
+\emph on
+exactly one
+\emph default
+ 
+\begin_inset Formula $dX$
+\end_inset
+
+ (as a whole or split into portions).
+\end_layout
+
+\begin_layout Standard
+This can be proved very easily by noticing that we can 
+\emph on
+take out
+\emph default
+ the portions we're interested in.
+ For instance:
+\begin_inset Formula 
+\begin{align*}
+dB & =d({\color{blue}A_{1}X[X_{2}A_{2}]X_{3}[X_{1}C_{2}]C_{1}DX_{23}[\overline{X_{1}}C_{3}]})\\
+ & =d(X\myodot{\overline{1}23}{10,3,4}{\color{blue}A_{1}XA_{2}1[X_{1}C_{2}]C_{1}DX_{23}C_{3}})\\
+ & =dX\myodot{\overline{1}23}{10,3,4}{\color{blue}A_{1}XA_{2}1[X_{1}C_{2}]C_{1}DX_{23}C_{3}}+\\
+ & \skipeq X\myodot{\overline{1}23}{10,3,4}d({\color{blue}A_{1}XA_{2}1[X_{1}C_{2}]C_{1}DX_{23}C_{3}})\\
+ & ={\color{blue}A_{1}X[\boldsymbol{dX_{2}}A_{2}]\boldsymbol{dX_{3}}[X_{1}C_{2}]C_{1}DX_{23}[\overline{\boldsymbol{dX_{1}}}C_{3}]}+\\
+ & \skipeq d({\color{blue}A_{1}X[\cancel{X_{2}}A_{2}]\cancel{X_{3}}[X_{1}C_{2}]C_{1}DX_{23}[\overline{\cancel{X_{1}}}C_{3}]}),
+\end{align*}
+
+\end_inset
+
+where terms 
+\emph on
+stricken through obliquely
+\emph default
+ (e.g.
+ 
+\begin_inset Formula $\cancel{X_{2}}$
+\end_inset
+
+) are still present but can't be reused and must be regarded as 
+\emph on
+constants
+\emph default
+.
+\end_layout
+
+\begin_layout Subsection
+Function application
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $f:\mathbb{R}\to\mathbb{R}$
+\end_inset
+
+ case
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:f:R->R_case"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Sometimes we want to apply functions element-wise to tensors.
+ For instance, if 
+\begin_inset Formula $f$
+\end_inset
+
+ is an 
+\begin_inset Formula $\mathbb{R}\to\mathbb{R}$
+\end_inset
+
+ function and 
+\begin_inset Formula $A$
+\end_inset
+
+ a matrix, then 
+\begin_inset Formula $[f(A)]_{ij}=f(A_{ij})$
+\end_inset
+
+.
+ In general, for 
+\begin_inset Formula $f:\mathbb{R\to\mathbb{R}}$
+\end_inset
+
+ and 
+\begin_inset Formula $A\in\mathbb{T}_{n}$
+\end_inset
+
+,
+\begin_inset Formula 
+\begin{equation}
+f(A)_{I}=f(A_{I}).\label{eq:simple_func_applic}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can easily prove that if 
+\begin_inset Formula $f$
+\end_inset
+
+ is an 
+\begin_inset Formula $\mathbb{R}\to\mathbb{R}$
+\end_inset
+
+ function and 
+\begin_inset Formula $X$
+\end_inset
+
+ a tensor, then
+\begin_inset Formula 
+\[
+df(X)=f'(X)\odot dX.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's prove it:
+\begin_inset Formula 
+\begin{align*}
+df(X;e_{J})_{I} & =\frac{\partial f(X)_{I}}{\partial X_{J}} &  & \text{(for \ref{eq:df_and_partials_def})}\\
+ & =\frac{\partial f(X_{I})}{\partial X_{J}} &  & \text{(for \ref{eq:simple_func_applic})}\\
+ & =\frac{\partial f(X_{I})}{\partial X_{I}}\frac{\partial X_{I}}{\partial X_{J}}\\
+ & =f'(X_{I})\frac{\partial X_{I}}{\partial X_{J}}\\
+ & =f'(X_{I})\delta_{J=I}\\
+ & =[f'(X)\odot e_{J}]_{I}\implies
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+df(X;dX)=f'(X)\odot dX.\label{eq:diff_of_simple_func_appl}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that identity
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diff_of_simple_func_appl"
+
+\end_inset
+
+ can be rewritten as
+\begin_inset Formula 
+\begin{equation}
+[df(X;dX)]_{I}=f'(X_{I})dX_{I}.\label{eq:simple_func_appl_shortcut}
+\end{equation}
+
+\end_inset
+
+Of course, this is only valid in this specific case, i.e.
+ for 
+\begin_inset Formula $f:\mathbb{R}\to\mathbb{R}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Partial and Dot Indices
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Partial-Indices"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To be able to reason about tensors we'll need to introduce the concepts
+ of (what I call) 
+\emph on
+partial indices
+\emph default
+ and 
+\emph on
+dot indices
+\emph default
+.
+ They're useful because they let us index 
+\emph on
+subtensors
+\emph default
+ of tensors instead of just single 
+\emph on
+scalars
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+For instance, if 
+\begin_inset Formula $M$
+\end_inset
+
+ is a matrix, the rows and columns of 
+\begin_inset Formula $M$
+\end_inset
+
+ are subtensors of 
+\begin_inset Formula $M$
+\end_inset
+
+ indexed by dot indices of the form 
+\begin_inset Formula $i\cdot$
+\end_inset
+
+ and 
+\begin_inset Formula $\cdot j$
+\end_inset
+
+, respectively.
+ The positions with a 
+\emph on
+dot
+\emph default
+ are called 
+\emph on
+dot
+\emph default
+ positions.
+\end_layout
+
+\begin_layout Standard
+Indices which correspond to single dimensions are written in 
+\emph on
+lowercase
+\emph default
+ and are called 
+\emph on
+scalar indices
+\emph default
+.
+ For instance, if 
+\begin_inset Formula $M$
+\end_inset
+
+ is a matrix, then 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ in 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ are scalar indices.
+ A 
+\emph on
+multidimensional index
+\emph default
+ is a list of one or more scalar indices.
+ For instance, 
+\begin_inset Formula $I=ijk$
+\end_inset
+
+ is a multidimensional index and 
+\begin_inset Formula $A_{I}$
+\end_inset
+
+ is equivalent to 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $A_{ijk}$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Multidimensional indices are especially useful in definitions and proofs
+ where we often want to index the elements or subtensors of generic tensors.
+\end_layout
+
+\begin_layout Standard
+A scalar index has dimension 
+\begin_inset Formula $1$
+\end_inset
+
+ while a multidimensional index has dimension equal to the 
+\emph on
+length
+\emph default
+ of the list of scalar indices it represents.
+ We can use
+\emph on
+ subscripts
+\emph default
+ to indicate the dimension of an index.
+ For instance, 
+\begin_inset Formula $I_{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $J_{m}$
+\end_inset
+
+ are indices of dimension 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $m$
+\end_inset
+
+, respectively.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $P=p_{1}\cdots p_{k}$
+\end_inset
+
+ be a list of positions in 
+\begin_inset Formula $\{1,\ldots,n\}$
+\end_inset
+
+ (as always
+\emph on
+, without repetitions
+\emph default
+).
+ Let 
+\begin_inset Formula $I_{n}=i_{1}\cdots i_{n}$
+\end_inset
+
+, 
+\begin_inset Formula $J_{k}=j_{1}\cdots j_{k}$
+\end_inset
+
+, and so on.
+ Then:
+\end_layout
+
+\begin_layout Itemize
+We can 
+\emph on
+extract
+\emph default
+ sub-indices from other indices:
+\begin_inset Formula 
+\[
+I_{n}[P]=i_{p_{1}}\cdots i_{p_{k}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We can 
+\emph on
+spread out 
+\emph default
+indices:
+\begin_inset Formula 
+\begin{align*}
+\dim(I_{k}^{P}) & =n\\
+I_{k}^{P}[P] & =I_{k}\\
+I_{k}^{P}[-P] & =\epsilon_{n-k}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\epsilon_{n-k}$
+\end_inset
+
+ is a list of 
+\begin_inset Formula $n-k$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+no element
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This means that 
+\begin_inset Formula $I_{k}^{P}$
+\end_inset
+
+ is 
+\begin_inset Formula $I_{k}$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+spread out
+\begin_inset Quotes erd
+\end_inset
+
+ over the positions in 
+\begin_inset Formula $P$
+\end_inset
+
+ (not necessarily increasing) and all the positions 
+\begin_inset Formula $-P$
+\end_inset
+
+ (
+\emph on
+always
+\emph default
+ increasing) are holes, i.e.
+ they have no elements.
+ 
+\begin_inset Formula $I_{k}^{P}$
+\end_inset
+
+ is called a 
+\emph on
+partial index
+\emph default
+ because it has holes.
+ A 
+\emph on
+full index
+\emph default
+ is an index without any holes.
+ 
+\series bold
+Do not confuse 
+\emph on
+holes
+\emph default
+ with dots!
+\end_layout
+
+\begin_layout Itemize
+We can 
+\emph on
+fill 
+\emph default
+missing positions.
+ If 
+\begin_inset Formula $J=J_{n-k}J_{m}$
+\end_inset
+
+ is a full index, then
+\begin_inset Formula 
+\begin{align}
+\dim(I_{k}^{P}J) & =n+m\nonumber \\
+(I_{k}^{P}J)[P] & =I_{k}\label{eq:(I_k^PJ)[P]}\\
+(I_{k}^{P}J)[-P] & =J_{n-k}\label{eq:(I_k^PJ)[-P]}\\
+(I_{k}^{P}J)[(n+1)\cdots(n+m)] & =J_{m},\qquad\text{for }m>0\label{eq:condition_m>0}
+\end{align}
+
+\end_inset
+
+If 
+\begin_inset Formula $m=0$
+\end_inset
+
+ then 
+\begin_inset Formula $J=J_{n-k}$
+\end_inset
+
+ and condition
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condition_m>0"
+
+\end_inset
+
+ doesn't apply.
+ Note that 
+\begin_inset Formula $I_{k}^{P}J$
+\end_inset
+
+ is a full index for any (non negative) 
+\begin_inset Formula $m$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+If 
+\begin_inset Formula $J=J_{h}$
+\end_inset
+
+, 
+\begin_inset Formula $h<n-k$
+\end_inset
+
+, then
+\begin_inset Formula 
+\begin{align*}
+\dim(I_{k}^{P}J) & =n\\
+(I_{k}^{P}J)[P] & =I_{k}\\
+(I_{k}^{P}J)[-P] & =J_{h}\epsilon_{n-k-h}
+\end{align*}
+
+\end_inset
+
+which means that 
+\begin_inset Formula $I_{k}^{P}J$
+\end_inset
+
+ is a partial index with 
+\begin_inset Formula $n-k-h$
+\end_inset
+
+ holes.
+\begin_inset Newline newline
+\end_inset
+
+Note that we can fill missing positions with dots as in 
+\begin_inset Formula $I_{k}^{P}\cdot_{n-k}$
+\end_inset
+
+ or, more concisely, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $I_{k}^{P}\cdot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ We often use a single (vector) dot to mean that all the missing positions
+ are filled with dots.
+\end_layout
+
+\begin_layout Standard
+Now we can define what dot indices mean more formally:
+\begin_inset Formula 
+\[
+(X_{I_{k}^{P}\cdot_{n-k}})_{I_{n-k}}=X_{I_{k}^{P}I_{n-k}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Note that I stopped adding punctuation at the end of the formulas because
+ things might get confusing now that we use dot indices.
+\end_layout
+
+\begin_layout Subsubsection
+Useful manipulations
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Useful-manipulations"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here are some useful 
+\emph on
+manipulations
+\emph default
+ we'll need soon:
+\end_layout
+
+\begin_layout Itemize
+We can 
+\emph on
+split
+\emph default
+ (or 
+\emph on
+join
+\emph default
+) indices:
+\begin_inset Formula 
+\begin{align}
+X_{I_{n}I_{k}I_{m}} & =(X_{I_{n}\cdot_{k}I_{m}})_{I_{k}}\label{eq:split_index}\\
+X_{\cdot_{n}I_{k}I_{m}} & =(X_{\cdot_{n}\cdot_{k}I_{m}})_{\cdot_{n}I_{k}}\label{eq:split_index_extended}
+\end{align}
+
+\end_inset
+
+where the indices can also be partial.
+ Note that 
+\begin_inset Formula $I_{k}$
+\end_inset
+
+ takes the place of the dots.
+ Identity
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:split_index_extended"
+
+\end_inset
+
+ is trickier because we need to replace the dots with 
+\begin_inset Formula $\cdot_{n}I_{k}$
+\end_inset
+
+ instead of just 
+\begin_inset Formula $I_{k}$
+\end_inset
+
+, otherwise we'd get 
+\begin_inset Formula $I_{k}\cdot_{n}I_{m}$
+\end_inset
+
+ instead of 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\cdot_{n}I_{k}I_{m}$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+Here's a simple example where 
+\begin_inset Formula $M$
+\end_inset
+
+ is a matrix:
+\begin_inset Formula 
+\[
+M_{24}=(M_{2\cdot})_{4}=(M_{\cdot4})_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We can replace 
+\begin_inset Formula $\delta$
+\end_inset
+
+ with 
+\begin_inset Formula $e$
+\end_inset
+
+ and vice versa:
+\begin_inset Formula 
+\begin{align}
+X_{I_{n}I_{k}I_{m}}\delta_{I_{k}=J_{k}} & =X_{I_{n}I_{k}I_{m}}[e_{J_{k}}]_{I_{k}}\nonumber \\
+ & =\left[X_{I_{n}\cdot_{k}I_{m}}\odot e_{J_{k}}\right]_{I_{k}}\label{eq:delta_e_I_k}\\
+X_{I_{n}I_{k}I_{m}}\delta_{I_{k}=J_{k}} & =X_{I_{n}I_{k}I_{m}}[e_{I_{k}}]_{J_{k}}\nonumber \\
+ & =\left[X_{I_{n}\cdot_{k}I_{m}}\odot e_{I_{k}}\right]_{J_{k}}\nonumber 
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We can replace an index with an 
+\begin_inset Formula $e$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align}
+X_{I_{n}I_{k}I_{m}} & =[X_{I_{n}\cdot_{k}I_{m}}]_{I_{k}}\nonumber \\
+ & =\sum_{J_{k}}[X_{I_{n}\cdot_{k}I_{m}}]_{J_{k}}\delta_{J_{k}=I_{k}}\nonumber \\
+ & =\sum_{J_{k}}[X_{I_{n}\cdot_{k}I_{m}}]_{J_{k}}[e_{I_{k}}]_{J_{k}}\nonumber \\
+ & =\sum_{J_{k}}[X_{I_{n}\cdot_{k}I_{m}}\odot e_{I_{k}}]_{J_{k}}\nonumber \\
+ & =X_{I_{n}\cdot_{k}I_{m}}\cdot e_{I_{k}}\label{eq:index_e}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $f:\mathbb{T}_{n}\to\mathbb{T}_{m}$
+\end_inset
+
+ case
+\end_layout
+
+\begin_layout Standard
+We can generalize the simple result of subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:f:R->R_case"
+
+\end_inset
+
+ to cases when we want to apply a function to every subtensor (in a tensor)
+ indexed by a 
+\emph on
+dot index
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensor and 
+\begin_inset Formula $P=p_{1}\cdots p_{k}$
+\end_inset
+
+ a list of positions.
+ We now want to determine the differential of 
+\begin_inset Formula $f^{P}(X)$
+\end_inset
+
+ for 
+\begin_inset Formula $f:\mathbb{T}_{n-k}\to\mathbb{T}_{m}$
+\end_inset
+
+ where 
+\begin_inset Formula $f^{P}(X)$
+\end_inset
+
+ is the result of applying 
+\begin_inset Formula $f$
+\end_inset
+
+ to all the subtensors of 
+\begin_inset Formula $X$
+\end_inset
+
+ indexed by an index of the form 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $I_{k}^{P}\cdot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Here's a natural definition of this operation:
+\begin_inset Formula 
+\begin{equation}
+f^{P}(X)_{I_{k}^{P}I_{m}}=f(X_{I_{k}^{P}\cdot})_{I_{m}}\qquad\qquad\text{(not used!)}\label{eq:f^P_def_WRONG}
+\end{equation}
+
+\end_inset
+
+This definition is particular because 
+\begin_inset Formula $f^{P}$
+\end_inset
+
+ takes subtensors from positions 
+\begin_inset Formula $-P$
+\end_inset
+
+ and puts the resulting tensors back into the same positions.
+ For instance, if 
+\begin_inset Formula $M$
+\end_inset
+
+ is a matrix and 
+\begin_inset Formula $f$
+\end_inset
+
+ is 
+\begin_inset Formula $\mathbb{T}_{1}\to\mathbb{T}_{1}$
+\end_inset
+
+, then 
+\begin_inset Formula $f^{2}(M)$
+\end_inset
+
+ modifies the columns of 
+\begin_inset Formula $M$
+\end_inset
+
+ one by one without moving them.
+\end_layout
+
+\begin_layout Standard
+Unfortunately, as we'll see, this definition would complicate our final
+ formula, so we'll use this definition instead:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+f^{P}(X)_{I_{k}I_{m}}=f(X_{I_{k}^{P}\cdot})_{I_{m}}\label{eq:f^P_def}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we need to define a sort of 
+\emph on
+generalized Jacobian
+\emph default
+ or 
+\emph on
+generalized gradient
+\emph default
+.
+ Here's the generalized Jacobian:
+\begin_inset Formula 
+\[
+\mathbf{J}f(X)_{I_{m}I_{n}}=\frac{\partial f(X)_{I_{m}}}{\partial X_{I_{n}}}.
+\]
+
+\end_inset
+
+Note that
+\begin_inset Formula 
+\[
+g(X)=\mathbf{J}f(X)\iff df(X;dX)=g(X)\cdot_{>}dX
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $A\cdot_{>}B=A\cdot_{\dim(B)}B$
+\end_inset
+
+ (useful when 
+\begin_inset Formula $\dim(A)>\dim(B)$
+\end_inset
+
+) and 
+\begin_inset Formula $A\cdot_{<}B=A\cdot_{\dim(A)}B$
+\end_inset
+
+ (useful when 
+\begin_inset Formula $\dim(A)<\dim(B)$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Since the gradient is the 
+\emph on
+transpose
+\emph default
+ of the Jacobian (for 
+\emph on
+scalar functions of vectors
+\emph default
+) then the generalized gradient is the 
+\begin_inset Quotes eld
+\end_inset
+
+transpose
+\begin_inset Quotes erd
+\end_inset
+
+ of the generalized Jacobian:
+\begin_inset Formula 
+\begin{equation}
+\nabla f(X)_{I_{n}I_{m}}=\frac{\partial f(X)_{I_{m}}}{\partial X_{I_{n}}}.\label{eq:gen_gradient}
+\end{equation}
+
+\end_inset
+
+Analogously to the case of the generalized Jacobian, 
+\begin_inset Formula $\nabla f(X)$
+\end_inset
+
+ can be easily found by exploiting the following fact:
+\begin_inset Formula 
+\begin{equation}
+g(X)=\nabla f(X)\iff df(X;dX)=dX\cdot_{<}g(X)\label{eq:gradient_identity}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As before, let's assume that 
+\begin_inset Formula $f$
+\end_inset
+
+ is 
+\begin_inset Formula $\mathbb{T}_{n-k}\to\mathbb{T}_{m}$
+\end_inset
+
+, 
+\begin_inset Formula $X$
+\end_inset
+
+ is an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional tensor and 
+\begin_inset Formula $P=p_{1}\cdots p_{k}$
+\end_inset
+
+ is a list of positions in 
+\begin_inset Formula $\{1,\ldots,n\}$
+\end_inset
+
+ (as always, 
+\emph on
+without repetitions
+\emph default
+).
+ In what follows:
+\end_layout
+
+\begin_layout Itemize
+indices of dimension 
+\begin_inset Formula $k$
+\end_inset
+
+ index the subtensors of 
+\begin_inset Formula $X$
+\end_inset
+
+ which 
+\begin_inset Formula $f$
+\end_inset
+
+ is applied to;
+\end_layout
+
+\begin_layout Itemize
+indices of dimension 
+\begin_inset Formula $n-k$
+\end_inset
+
+ index the partial derivatives of 
+\begin_inset Formula $f$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Itemize
+indices of dimension 
+\begin_inset Formula $m$
+\end_inset
+
+ index the elements of the tensor returned by 
+\begin_inset Formula $f$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let's try to derive a formula for the general case by using definition
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:f^P_def"
+
+\end_inset
+
+ and the generalized gradient:
+\begin_inset Formula 
+\begin{align}
+ & df^{P}(X;e_{J_{k}^{P}J_{n-k}})_{I_{k}I_{m}}=\nonumber \\
+ & \frac{\partial f^{P}(X)_{I_{k}I_{m}}}{\partial X_{J_{k}^{P}J_{n-k}}}= &  & \text{(for \ref{eq:df_and_partials_def})}\\
+ & \frac{\partial f(X_{I_{k}^{P}\cdot})_{I_{m}}}{\partial X_{J_{k}^{P}J_{n-k}}}= &  & \text{(for \ref{eq:f^P_def})}\nonumber \\
+ & \frac{\partial f(X_{I_{k}^{P}\cdot})_{I_{m}}}{\partial X_{I_{k}^{P}J_{n-k}}}\frac{\partial X_{I_{k}^{P}J_{n-k}}}{\partial X_{J_{k}^{P}J_{n-k}}}=\nonumber \\
+ & \frac{\partial f(X_{I_{k}^{P}\cdot})_{I_{m}}}{\partial(X_{I_{k}^{P}\cdot})_{J_{n-k}}}\frac{\partial X_{I_{k}^{P}J_{n-k}}}{\partial X_{J_{k}^{P}J_{n-k}}}= &  & \text{(for \ref{eq:split_index})}\nonumber \\
+ & \nabla f(X_{I_{k}^{P}\cdot})_{J_{n-k}I_{m}}\delta_{I_{k}=J_{k}}= &  & \text{(for \ref{eq:gen_gradient})}\nonumber \\
+ & \nabla f^{P}(X)_{I_{k}J_{n-k}I_{m}}\delta_{I_{k}=J_{k}}= &  & \text{(for \ref{eq:f^P_def})}\label{eq:gradient_step_2}\\
+ & \left[\nabla f^{P}(X)_{\cdot_{k}J_{n-k}I_{m}}\myodot{1\cdots k}{1\cdots k}e_{J_{k}}\right]_{I_{k}}= &  & \text{(for \ref{eq:delta_e_I_k})}\nonumber \\
+ & \left[\left(\nabla f^{P}(X)_{\cdot_{k}\cdot_{n-k}I_{m}}\myodot{1\cdots k}{1\cdots k}e_{J_{k}}\right)\mycdot{(k+1)\cdots n}{(k+1)\cdots n}e_{J_{n-k}}\right]_{I_{k}}= &  & \text{(for \ref{eq:index_e})}\nonumber \\
+ & \left[\nabla f^{P}(X)_{\cdot_{k}\cdot_{n-k}I_{m}}\myodot{1\cdots k(k+1)\cdots n}{1\cdots k\overline{(k+1)\cdots n}}e_{J_{k}J_{n-k}}\right]_{I_{k}}=\nonumber \\
+ & \left[\left[\nabla f^{P}(X)_{\cdot_{k}\cdot_{n-k}\cdot_{m}}\myodot{1\cdots k(k+1)\cdots n}{1\cdots k\overline{(k+1)\cdots n}}e_{J_{k}J_{n-k}}\right]_{\cdot_{k}I_{m}}\right]_{I_{k}}= &  & \text{(for \ref{eq:split_index_extended})}\nonumber \\
+ & \left[\nabla f^{P}(X)_{\cdot_{k}\cdot_{n-k}\cdot_{m}}\myodot{1\cdots k(k+1)\cdots n}{1\cdots k\overline{(k+1)\cdots n}}e_{J_{k}J_{n-k}}\right]_{I_{k}I_{m}}= &  & \text{(for \ref{eq:split_index})}\nonumber \\
+ & \left[\nabla f^{P}(X)\myodot{1\cdots n}{1\cdots k\overline{(k+1)\cdots n}}e_{J_{k}J_{n-k}}\right]_{I_{k}I_{m}}=\nonumber \\
+ & \left[\nabla f^{P}(X)\myodot{1\cdots n}{P\overline{(-P)}}e_{J_{k}^{P}J_{n-k}}\right]_{I_{k}I_{m}}\implies\nonumber 
+\end{align}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+df^{P}(X;dX)=\nabla f^{P}(X)\myodot{1\cdots n}{P\overline{(-P)}}dX\label{eq:func_appl_final_formula}
+\end{equation}
+
+\end_inset
+
+The final formula is pretty enough, isn't it? In case you skipped the proof,
+ note that 
+\begin_inset Formula $\nabla f^{P}(X)$
+\end_inset
+
+ is to be interpreted as 
+\begin_inset Formula $(\nabla f)^{P}(X)$
+\end_inset
+
+, so we can compute 
+\begin_inset Formula $\nabla f$
+\end_inset
+
+ separately.
+\end_layout
+
+\begin_layout Standard
+If we had used the generalized Jacobian instead of the generalized gradient,
+ expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:gradient_step_2"
+
+\end_inset
+
+ would have been
+\begin_inset Formula 
+\[
+\mathbf{J}f^{P}(X)_{I_{k}I_{m}J_{n-k}}\delta_{I_{k}=J_{k}}
+\]
+
+\end_inset
+
+which is annoying because 
+\begin_inset Formula $I_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $J_{n-k}$
+\end_inset
+
+ are separated by 
+\begin_inset Formula $I_{m}$
+\end_inset
+
+.
+ This means that we wouldn't have get that nice 
+\begin_inset Formula $1\cdots n$
+\end_inset
+
+ in the final formula.
+\end_layout
+
+\begin_layout Standard
+Also, if we had used definition
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:f^P_def_WRONG"
+
+\end_inset
+
+ instead of definition
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:f^P_def"
+
+\end_inset
+
+, we would have ended up with
+\begin_inset Formula 
+\[
+df^{P}(X;e_{J_{k}^{P}J_{n-k}})_{I_{k}^{P}I_{m}}=[\cdots]_{I_{k}I_{m}}
+\]
+
+\end_inset
+
+which can't be directly simplified.
+ Of course, we could have manipulated the expression to get
+\begin_inset Formula 
+\[
+df^{P}(X;e_{J_{k}^{P}J_{n-k}})_{I_{k}^{P}I_{m}}=[\cdots]_{I_{k}^{P}I_{m}}
+\]
+
+\end_inset
+
+but that would have made the final formula less pleasing to the eyes.
+\end_layout
+
+\begin_layout Subsubsection
+A simple example
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:A-simple-example"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $s:\mathbb{T}_{1}\to\mathbb{T}_{1}$
+\end_inset
+
+ be the 
+\emph on
+softmax 
+\emph default
+function defined as
+\begin_inset Formula 
+\[
+s(a)=\frac{e^{a}}{\boldsymbol{1}^{T}e^{a}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We want to compute the differential of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Z=s^{1}(A)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $A$
+\end_inset
+
+ is a matrix and 
+\begin_inset Formula $s$
+\end_inset
+
+ is applied to the rows of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+By identity
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:func_appl_final_formula"
+
+\end_inset
+
+,
+\begin_inset Formula 
+\begin{align*}
+dZ & =\nabla s^{1}(A)\myodot{12}{1\overline{2}}dA
+\end{align*}
+
+\end_inset
+
+Now, since 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $e^{a}$
+\end_inset
+
+ are clearly two column vectors, we get:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+e^{a} & =(\boldsymbol{1}^{T}e^{a})s\\
+ & =s\boldsymbol{1}^{T}e^{a}\implies\\
+e^{a}\odot da & =ds\boldsymbol{1}^{T}e^{a}+s\boldsymbol{1}^{T}(e^{a}\odot da)\implies\\
+ds1^{T}e^{a} & =e^{a}\odot da-s\boldsymbol{1}^{T}(e^{a}\odot da)\\
+ & =(I-s\boldsymbol{1}^{T})(e^{a}\odot da)\\
+ & =M(e^{a}\odot da)\implies\\
+ds & =M(s\odot da)\\
+ & ={\color{blue}M_{1}[\overline{M_{2}}sda]}\\
+ & ={\color{blue}[\overline{da}sM_{2}]M_{1}}\\
+ & =da\cdot_{1}{\color{blue}[sM_{2}]M_{1}}\\
+ & =da\cdot_{1}(s\odot_{1}M^{T})\implies\\
+\nabla s & =s\odot_{1}M^{T} &  & \text{(for \ref{eq:gradient_identity})}\\
+ & =s\odot_{1}(I-s\boldsymbol{1}^{T})^{T}\\
+ & =s\odot_{1}(I-\boldsymbol{1}s^{T})\\
+ & =s\boldsymbol{1}^{T}\odot(I-\boldsymbol{1}s^{T})\\
+ & =s\boldsymbol{1}^{T}\odot I-s\boldsymbol{1}^{T}\odot\boldsymbol{1}s^{T}\\
+ & =\diag(s)-ss^{T}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Common results about matrices
+\end_layout
+
+\begin_layout Standard
+Here are a few results specific to matrices:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $d(\tr(X))=d(X\cdot I)=dX\cdot I=\tr(dX)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $d(X^{-1})=-X^{-1}(dX)X^{-1}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Proof:
+\begin_inset Formula 
+\begin{gather*}
+0=d(I)=d(XX^{-1})=dXX^{-1}+Xd(X^{-1})\implies\\
+Xd(X^{-1})=-dXX^{-1}\implies\\
+d(X^{-1})=-X^{-1}dXX^{-1}.
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $d|X|=|X|X^{-T}\cdot dX$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Proof:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Let 
+\begin_inset Formula $C$
+\end_inset
+
+ be the 
+\emph on
+cofactor matrix
+\emph default
+ of 
+\begin_inset Formula $X$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $C_{ij}=(-1)^{i+j}|X_{-i,-j}|$
+\end_inset
+
+, where 
+\begin_inset Formula $X_{-i,-j}$
+\end_inset
+
+ is the matrix obtained from 
+\begin_inset Formula $X$
+\end_inset
+
+ by deleting the 
+\begin_inset Formula $i$
+\end_inset
+
+-th row and the 
+\begin_inset Formula $j$
+\end_inset
+
+-th column.
+\end_layout
+
+\begin_layout Itemize
+We know from 
+\emph on
+Linear Algebra
+\emph default
+ that 
+\begin_inset Formula $X^{-1}=|X|^{-1}C^{T}$
+\end_inset
+
+ and that 
+\begin_inset Formula $|X|=\sum_{k}X_{ik}C_{ik}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Therefore,
+\begin_inset Formula 
+\begin{gather*}
+\frac{\partial|X|}{\partial X_{ij}}=\frac{\partial\sum_{k}X_{ik}C_{ik}}{\partial X_{ij}}=C_{ij}\implies\\
+d|X|=C\cdot dX=|X|X^{-T}\cdot dX.
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+To verify the last result, remember that we said that the coefficient of
+ 
+\begin_inset Formula $dX_{ij}$
+\end_inset
+
+ in 
+\begin_inset Formula $d|X|$
+\end_inset
+
+ must be equal to 
+\begin_inset Formula $\frac{\partial|X|}{\partial X_{ij}}$
+\end_inset
+
+.
+ Indeed,
+\begin_inset Formula 
+\[
+|X|X^{-T}\cdot e_{ij}=C\cdot e_{ij}=C_{ij}=\frac{\partial|X|}{\partial X_{ij}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the literature, this result is written as
+\begin_inset Formula 
+\[
+d|X|=|X|\tr(X^{-1}dX).
+\]
+
+\end_inset
+
+Note that the two results are equivalent:
+\begin_inset Formula 
+\begin{align*}
+|X|\tr(X^{-1}dX) & =|X|\sum_{i}(X^{-1}dX)_{ii}\\
+ & =|X|\sum_{i}\sum_{k}(X^{-1})_{ik}dX_{ki}\\
+ & =|X|\sum_{k}\sum_{i}(X^{-T})_{ki}dX_{ki}\\
+ & =|X|X^{-T}\cdot dX.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Practice
+\end_layout
+
+\begin_layout Standard
+We can finally put into practice what we've learned so far, where that 
+\begin_inset Quotes eld
+\end_inset
+
+finally
+\begin_inset Quotes erd
+\end_inset
+
+ implies that you've read and understood Part
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "part:Theory"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+As before, terms in bracket notation will be written in 
+\color blue
+blue
+\color inherit
+.
+ Note that we'll only use bracket notation when necessary.
+\end_layout
+
+\begin_layout Section
+Basic Examples
+\end_layout
+
+\begin_layout Standard
+Unless otherwise specified, 
+\begin_inset Formula $x$
+\end_inset
+
+ (or 
+\begin_inset Formula $X$
+\end_inset
+
+) is always the variable we take the differential with respect to.
+ Remember that 
+\begin_inset Formula $d\cdot$
+\end_inset
+
+ binds stronger than any other operator.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f(x)=a^{T}x$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align}
+d(a^{T}x) & =a^{T}dx\label{eq:a^Tdx}\\
+ & =a\cdot dx\implies\nonumber 
+\end{align}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nabla_{x}f=a
+\]
+
+\end_inset
+
+Note that 
+\begin_inset Formula $a^{T}dx$
+\end_inset
+
+ becomes 
+\begin_inset Formula $a\cdot dx$
+\end_inset
+
+ and not 
+\begin_inset Formula $a^{T}\cdot dx$
+\end_inset
+
+.
+ The latter would be a mistake because 
+\begin_inset Formula $a^{T}={\color{blue}\iota a}\in\mathbb{T}_{2}$
+\end_inset
+
+, while 
+\begin_inset Formula $dx={\color{blue}dx}\in\mathbb{T}_{1}$
+\end_inset
+
+.
+ The operator 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\cdot$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ (in this simple form) always multiplies tensors of the same dimension.
+ See subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:A-remark-about-vectors"
+
+\end_inset
+
+ for more information.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f(x)=x^{T}Ax$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d(x^{T}Ax) & =dx^{T}Ax+x^{T}d(Ax)\\
+ & =dx^{T}Ax+x^{T}Adx\\
+ & =x^{T}A^{T}dx+x^{T}Adx\\
+ & =(x^{T}A^{T}+x^{T}A)dx\\
+ & =(x^{T}(A^{T}+A))dx &  & \text{(same as \ref{eq:a^Tdx})}\\
+ & =((A+A^{T})x)\cdot dx\implies
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nabla_{x}f=(A+A^{T})x
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f(X)=a^{T}Xb$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d(a^{T}Xb) & =a^{T}dXb\\
+ & =a\cdot_{1}dX\cdot_{1}b\\
+ & ={\color{blue}[a\overline{dX_{1}}][\overline{dX_{2}}b]}\\
+ & ={\color{blue}ab}\cdot dX\\
+ & =(ab^{T})\cdot dX\implies
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nabla_{x}f=ab^{T}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Note the simplicity and regularity of the derivation above! For comparison,
+ this is the classic derivation:
+\begin_inset Formula 
+\begin{align*}
+d(a^{T}Xb) & =d\tr(a^{T}Xb)\\
+ & =\tr(d(a^{T}Xb))\\
+ & =\tr(a^{T}dXb)\\
+ & =\tr(ba^{T}dX)\implies
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+Df=ba^{T}\implies\nabla_{X}f=ab^{T}
+\]
+
+\end_inset
+
+This might not seem more complex than our derivation above, but the problem
+ is that the introduction of the 
+\emph on
+trace
+\emph default
+ operator seems an 
+\emph on
+ad hoc
+\emph default
+ trick.
+ Also we must accept that the derivative of 
+\begin_inset Formula $\tr(AdX)$
+\end_inset
+
+ is 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ Now we know why, but to the average practitioner this may look like some
+ 
+\emph on
+magical rule
+\emph default
+ one needs to remember.
+ Our generalization sidesteps all this 
+\begin_inset Quotes eld
+\end_inset
+
+ad-hociness
+\begin_inset Quotes erd
+\end_inset
+
+ completely and, above all, never conceals what's going on because bracket
+ notation is quite 
+\emph on
+explicit
+\emph default
+, 
+\emph on
+general
+\emph default
+ and yet 
+\emph on
+easy
+\emph default
+ to reason with.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f(X)=a^{T}XX^{T}a$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d(a^{T}XX^{T}a) & =a^{T}dXX^{T}a+a^{T}XdX^{T}a\\
+ & =2a^{T}dXX^{T}a\\
+ & =2{\color{blue}[a\overline{dX_{1}}][\overline{dX_{2}}X_{2}][X_{1}\overline{a}]}\\
+ & =2{\color{blue}aX_{2}[X_{1}\overline{a}]}\cdot dX\\
+ & =2(a\otimes X^{T}a)\cdot dX\\
+ & =2(aa^{T}X)\cdot dX\implies
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nabla_{X}f=2aa^{T}X
+\]
+
+\end_inset
+
+First of all, note that 
+\begin_inset Formula ${\color{blue}[X_{1}\overline{a}]}$
+\end_inset
+
+ acts as a scalar, so 
+\begin_inset Formula ${\color{blue}aX_{2}[X_{1}\overline{a}]}$
+\end_inset
+
+ has just 2 dimensions.
+ I know most of you know this, but someone might have skimmed over the more
+ technical sections and jumped right to this more practical section (
+\series bold
+\emph on
+big mistake
+\series default
+\emph default
+!).
+\begin_inset Newline newline
+\end_inset
+
+Second, note that if 
+\begin_inset Formula $a,b$
+\end_inset
+
+ are two column vectors, then 
+\begin_inset Formula ${\color{blue}ab}=a\otimes b=ab^{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f(X)=\tr(AX^{-1}B)$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This time, 
+\begin_inset Formula $\tr$
+\end_inset
+
+ is part of the original function, so we could just deal with it or rewrite
+ it using our operators.
+ Let's follow the second option.
+ To do this, note that 
+\begin_inset Formula $\tr(M)=M\cdot I$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align}
+d\tr(AX^{-1}B) & =d((AX^{-1}B)\cdot I)\nonumber \\
+ & =-(AX^{-1}dXX^{-1}B)\cdot I\label{eq:simpl_express}\\
+ & =-(UdXV)\cdot I\nonumber \\
+ & =-{\color{blue}U_{1}[U_{2}\overline{dX_{1}}][\overline{dX_{2}}V_{1}]V_{2}}\cdot I\nonumber \\
+ & =-{\color{blue}[\overline{I_{1}}U_{1}][U_{2}\overline{dX_{1}}][\overline{dX_{2}}V_{1}][\overline{I_{2}}V_{2}]}\nonumber \\
+ & =-{\color{blue}[\overline{I_{1}}U_{1}]U_{2}V_{1}[\overline{I_{2}}V_{2}]}\cdot dX\nonumber \\
+ & =-{\color{blue}U_{2}[U_{1}\overline{I_{1}}][\overline{I_{2}}V_{2}]V_{1}}\cdot dX\nonumber \\
+ & =-(U^{T}IV^{T})\cdot dX\nonumber \\
+ & =-(U^{T}V^{T})\cdot dX\implies\nonumber 
+\end{align}
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\nabla_{X}f=-U^{T}V^{T}=-X^{-T}A^{T}B^{T}X^{-T}
+\]
+
+\end_inset
+
+Note that we simplified expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:simpl_express"
+
+\end_inset
+
+ by grouping terms whose 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+internal interactions
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ we don't care about.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Formula $f(x)=xx^{T}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This one is quite interesting:
+\begin_inset Formula 
+\begin{align}
+d(xx^{T}) & =dxx^{T}+xdx^{T}\nonumber \\
+ & =Idxx^{T}+xdx^{T}I\nonumber \\
+ & ={\color{blue}I_{1}[I_{2}\overline{dx}]x}+{\color{blue}x[\overline{dx}I_{1}]I_{2}}\nonumber \\
+ & ={\color{blue}I_{1}x[I_{2}\overline{dx}]}+{\color{blue}xI_{2}[\overline{dx}I_{1}]}\nonumber \\
+ & =({\color{blue}I_{1}xI_{2}}+{\color{blue}xI_{2}I_{1}})\cdot_{1}dx\label{eq:example_result}
+\end{align}
+
+\end_inset
+
+Note how by multiplying both addends by 
+\begin_inset Formula $I$
+\end_inset
+
+ we can, in the end, bring 
+\begin_inset Formula $dx$
+\end_inset
+
+ in the same position in both addends.
+\begin_inset Newline newline
+\end_inset
+
+Expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:example_result"
+
+\end_inset
+
+ can be rewritten as
+\begin_inset Formula 
+\[
+((I\otimes x)_{132}+x\otimes I)\cdot_{1}dx.
+\]
+
+\end_inset
+
+(Note that in our notation 
+\begin_inset Formula $I\otimes x$
+\end_inset
+
+ is a 
+\begin_inset Formula $3$
+\end_inset
+
+-dimensional tensor, not a matrix.) It's not difficult to see that this is
+ correct.
+ Indeed,
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial(xx^{T})_{ij}}{\partial x_{p}}=\frac{\partial x_{i}x_{j}}{\partial x_{p}}=\begin{cases}
+2x_{i} & i=j=p\\
+x_{j} & i=p\neq j\\
+x_{i} & i\neq p=j\\
+0 & i\neq p\neq j
+\end{cases}\label{eq:partial_deriv}
+\end{equation}
+
+\end_inset
+
+which makes sense.
+ Let's rewrite the interesting part of expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:example_result"
+
+\end_inset
+
+ abusing notation 
+\emph on
+a lot
+\emph default
+ to see the correspondence between terms and indices:
+\begin_inset Formula 
+\[
+{\color{blue}I_{i}x_{j}I_{p}}+{\color{blue}x_{i}I_{j}I_{p}}
+\]
+
+\end_inset
+
+Now it should be clear that the first addend is 
+\begin_inset Formula $x_{j}\delta_{i=p}$
+\end_inset
+
+ and the second 
+\begin_inset Formula $x_{i}\delta_{j=p}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Deep Learning
+\end_layout
+
+\begin_layout Standard
+I don't think you need to be familiar with 
+\emph on
+Deep Learning
+\emph default
+ to understand this section, but you should have a thorough understanding
+ of 
+\emph on
+backpropagation
+\emph default
+.
+ If you need an introduction to it, or just a refresh, you can have a look
+ at my tutorial about 
+\emph on
+Calculus & Backpropagation
+\emph default
+
+\begin_inset CommandInset citation
+LatexCommand citep
+key "tomassoli-backprop"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note that in this section we don't use any Jacobians.
+ In particular, 
+\begin_inset Formula $J$
+\end_inset
+
+ is always the 
+\emph on
+loss function
+\emph default
+.
+\end_layout
+
+\begin_layout Subsection
+Single-Layer Fully-Connected Neural Network (Regression)
+\end_layout
+
+\begin_layout Standard
+First, let's consider a very small 
+\emph on
+single-layer fully-connected neural network
+\emph default
+ (FCNN) whose equations are:
+\begin_inset Formula 
+\begin{align*}
+h & =f(XW+b^{T})\\
+J(W,b) & =\frac{1}{2}||h-Y||^{2}
+\end{align*}
+
+\end_inset
+
+where:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $X$
+\end_inset
+
+ is the 
+\emph on
+input matrix
+\emph default
+, i.e.
+ the matrix whose rows are the 
+\emph on
+samples
+\emph default
+ in the 
+\emph on
+mini-batch
+\emph default
+;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $W$
+\end_inset
+
+ is the matrix of the 
+\emph on
+weights
+\emph default
+ for the single layer;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $b^{T}$
+\end_inset
+
+ is the 
+\emph on
+row vector
+\emph default
+ representing the 
+\emph on
+bias
+\emph default
+ for the single layer (note the 
+\emph on
+broadcasting
+\emph default
+);
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $Y$
+\end_inset
+
+ is the 
+\emph on
+output matrix
+\emph default
+, i.e.
+ the matrix whose rows are the 
+\begin_inset Quotes eld
+\end_inset
+
+correct predictions
+\begin_inset Quotes erd
+\end_inset
+
+ for the corresponding samples;
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $f$
+\end_inset
+
+ is an 
+\emph on
+activation function
+\emph default
+ which is applied 
+\emph on
+element-wise
+\emph default
+ to its input.
+\end_layout
+
+\begin_layout Standard
+First of all, let's rewrite the two equations more explicitly:
+\begin_inset Formula 
+\begin{align*}
+h & =f(XW+\boldsymbol{1}b^{T})\\
+J(W,b) & =\frac{1}{2}(h-Y)\cdot(h-Y).
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can compute the gradient of 
+\begin_inset Formula $J(W,b)$
+\end_inset
+
+ with respect to the parameters 
+\begin_inset Formula $W$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+.
+ Let's start from 
+\begin_inset Formula $h$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+dh & =f'(XW+\boldsymbol{1}b^{T})\odot d(XW+\boldsymbol{1}b^{T})\\
+ & =C\odot d(XW+\boldsymbol{1}b^{T})\\
+ & =C\odot(XdW+\boldsymbol{1}db^{T})
+\end{align*}
+
+\end_inset
+
+Note that we differentiated 
+\begin_inset Formula $h$
+\end_inset
+
+ with respect to both 
+\begin_inset Formula $W$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ at once for brevity.
+\end_layout
+
+\begin_layout Standard
+Now let's consider 
+\begin_inset Formula $J(W,b)$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+2dJ & =dh\cdot(h-Y)+(h-Y)\cdot dh\\
+ & =2(h-Y)\cdot dh\implies\\
+dJ & =(h-Y)\cdot dh\\
+ & =Z\cdot dh\\
+ & =Z\cdot(C\odot(XdW))+Z\cdot(C\odot(\boldsymbol{1}db^{T}))\\
+ & ={\color{blue}[\overline{Z}C(X_{1}[X_{2}\overline{dW_{1}}]dW_{2})]}+{\color{blue}[\overline{Z}C(1db)]}\\
+ & ={\color{blue}[X_{2}\overline{dW_{1}}][ZC(\overline{X_{1}dW_{2}})]}+{\color{blue}[ZC(\overline{1db})]}\\
+ & ={\color{blue}X_{2}[ZC(\overline{X_{1}}1)]}\cdot dW+{\color{blue}[ZC(\overline{1}1)]}\cdot db\\
+ & =(X^{T}{\color{blue}[ZC(11)]})\cdot dW+({\color{blue}[ZC(11)]}^{T}\boldsymbol{1})\cdot db &  & \text{(see subsec.\,\ref{subsec:A-remark-about-vectors})}\\
+ & =(X^{T}(Z\odot C))\cdot dW+((Z\odot C)^{T}\boldsymbol{1})\cdot db
+\end{align*}
+
+\end_inset
+
+The gradients are thus
+\begin_inset Formula 
+\begin{align*}
+\nabla_{W}J(W,b) & =X^{T}(Z\odot C)\\
+\nabla_{b}J(W,b) & =(Z\odot C)^{T}\boldsymbol{1}
+\end{align*}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+Z\odot C=(h-Y)\odot f'(XW+\boldsymbol{1}b^{T})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Multi-Layer Fully-Connected Neural Network (Regression)
+\end_layout
+
+\begin_layout Standard
+A 
+\emph on
+multi-layer 
+\emph default
+FCNN with 
+\begin_inset Formula $L$
+\end_inset
+
+ layers is described by the following equations:
+\begin_inset Formula 
+\begin{alignat*}{2}
+Z_{0} & =X\\
+A_{j} & =Z_{j-1}W_{j}+\boldsymbol{1}b_{j}^{T} &  & \qquad j=1,\ldots,L\\
+Z_{j} & =f_{j}(A_{j}) &  & \qquad j=1,\ldots,L
+\end{alignat*}
+
+\end_inset
+
+where the matrices are defined similarly to the single-layer case.
+ Let's assume the 
+\emph on
+mini-batch 
+\emph default
+has exactly 
+\begin_inset Formula $N$
+\end_inset
+
+ samples.
+\end_layout
+
+\begin_layout Standard
+In case of 
+\emph on
+regression
+\emph default
+ the 
+\emph on
+loss
+\emph default
+ is
+\begin_inset Formula 
+\[
+J(W,b)=\frac{1}{2N}(Z_{L}-Y)\cdot(Z_{L}-Y)+\frac{1}{2}\lambda\sum_{k}W_{k}\cdot W_{k},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $W$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ can be seen as two tensors.
+ This time we added an 
+\emph on
+L2 regularization
+\emph default
+ term.
+ Let 
+\begin_inset Formula $J_{1}$
+\end_inset
+
+ be 
+\begin_inset Formula $J$
+\end_inset
+
+ 
+\emph on
+without
+\emph default
+ the regularization term.
+\end_layout
+
+\begin_layout Standard
+The following graph suggests that we should compute 
+\begin_inset Formula $d_{Z_{j}}J_{1}$
+\end_inset
+
+ recursively and then compute 
+\begin_inset Formula $\nabla_{W_{j}}J_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\nabla_{b_{j}}J_{1}$
+\end_inset
+
+ from 
+\begin_inset Formula $d_{Z_{j}}J_{1}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Preview
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+preview true
+filename "graph1.tex"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By 
+\begin_inset Formula $d_{X}f$
+\end_inset
+
+ we mean 
+\begin_inset Formula $df$
+\end_inset
+
+ when 
+\begin_inset Formula $X$
+\end_inset
+
+ is the only variable and the other terms are regarded as constants.
+ Of course, if 
+\begin_inset Formula $Y$
+\end_inset
+
+ depends on 
+\begin_inset Formula $X$
+\end_inset
+
+ then we have
+\begin_inset Formula 
+\[
+d_{X}f=G(dY)=G(H(dX)).
+\]
+
+\end_inset
+
+Remember that if 
+\begin_inset Formula $f$
+\end_inset
+
+ is a scalar function and 
+\begin_inset Formula $Y$
+\end_inset
+
+ depends on 
+\begin_inset Formula $X$
+\end_inset
+
+, then
+\begin_inset Formula 
+\[
+d_{X}f=\nabla_{Y}f\cdot dY=\nabla_{X}f\cdot dX.
+\]
+
+\end_inset
+
+Again, 
+\begin_inset Formula $d_{X}f$
+\end_inset
+
+ doesn't mean that 
+\begin_inset Formula $df$
+\end_inset
+
+ is necessarily written directly as a function of 
+\begin_inset Formula $dX$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let's proceed:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d_{Z_{L}}J_{1} & =\frac{1}{2N}(dZ_{L}\cdot(Z_{L}-Y)+(Z_{L}-Y)\cdot dZ_{L})\\
+ & =\frac{1}{N}(Z_{L}-Y)\cdot dZ_{L}\\
+d_{Z_{j-1}}J_{1} & =\nabla_{Z_{j}}J_{1}\cdot dZ_{j}\\
+ & =\nabla_{Z_{j}}J_{1}\cdot(f_{j}'(A_{j})\odot dA_{j})\\
+ & =\nabla_{Z_{j}}J_{1}\cdot f_{j}'(A_{j})\odot(dZ_{j-1}W_{j})\\
+ & =P\cdot Q\odot(RS)\\
+ & ={\color{blue}[\overline{P}Q(R_{1}[\overline{R_{2}}S_{1}]S_{2})]}\\
+ & ={\color{blue}[PQ(\overline{R_{1}S_{2}})][\overline{R_{2}}S_{1}]}\\
+ & ={\color{blue}[PQ(1\overline{S_{2}})]S_{1}}\cdot R\\
+ & =((P\odot Q)S^{T})\cdot R\\
+ & =((\nabla_{Z_{j}}J_{1}\odot f_{j}'(A_{j}))W_{j}^{T})\cdot dZ_{j-1}\\
+d_{W_{j}}J_{1} & =\nabla_{Z_{j}}J_{1}\cdot dZ_{j}\\
+ & =\nabla_{Z_{j}}J_{1}\cdot(f_{j}'(A_{j})\odot dA_{j})\\
+ & =\nabla_{Z_{j}}J_{1}\cdot f_{j}'(A_{j})\odot(Z_{j-1}dW_{j})\\
+ & =P\cdot Q\odot(RS)\\
+ & ={\color{blue}[\overline{P}Q(R_{1}[R_{2}\overline{S_{1}}]S_{2})]}\\
+ & ={\color{blue}[R_{2}\overline{S_{1}}][PQ(\overline{R_{1}S_{2}})]}\\
+ & ={\color{blue}R_{2}[PQ(\overline{R_{1}}1)]}\cdot S\\
+ & =(R^{T}(P\odot Q))\cdot S\\
+ & =(Z_{J-1}^{T}(\nabla_{Z_{j}}J_{1}\odot f_{j}'(A_{j})))\cdot dW_{j}\\
+d_{b_{j}}J_{1} & =\nabla_{Z_{j}}J_{1}\cdot dZ_{j}\\
+ & =\nabla_{Z_{j}}J_{1}\cdot(f_{j}'(A_{j})\odot dA_{j})\\
+ & =\nabla_{Z_{j}}J_{1}\cdot f_{j}'(A_{j})\odot(\boldsymbol{1}db_{j}^{T})\\
+ & =P\cdot Q\odot(\boldsymbol{1}d^{T})\\
+ & ={\color{blue}[PQ(\overline{1d})]}\\
+ & ={\color{blue}[PQ(\overline{1}1)]}\cdot d\\
+ & =((P\odot Q)^{T}\boldsymbol{1})\cdot d\\
+ & =((\nabla_{Z_{j}}J_{1}\odot f_{j}'(A_{j}))^{T}\boldsymbol{1})\cdot db_{j}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+Here are the final formulas:
+\begin_inset Formula 
+\begin{alignat*}{2}
+\nabla_{Z_{L}}J_{1} & =\frac{1}{N}(Z_{L}-Y)\\
+\nabla_{Z_{j}}J_{1} & =S_{j+1}W_{j+1}^{T} &  & \qquad j=1,\ldots,L-1\\
+\nabla_{W_{j}}J_{1} & =Z_{j-1}^{T}S_{j} &  & \qquad j=1,\ldots,L\\
+\nabla_{b_{j}}J_{1} & =S_{j}^{T}\boldsymbol{1}, &  & \qquad j=1,\ldots,L
+\end{alignat*}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{alignat*}{2}
+S_{j} & =\nabla_{Z_{j}}J_{1}\odot f_{j}'(A_{j}) &  & \qquad j=1,\ldots,L
+\end{alignat*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Almost forgot:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d_{W_{j}}J & =d_{W_{j}}J_{1}+d_{W_{j}}\left(\frac{1}{2}\lambda\sum_{k}W_{k}\cdot W_{k}\right)\\
+ & =d_{W_{j}}J_{1}+\frac{1}{2}\lambda\sum_{k}d_{W_{j}}(W_{k}\cdot W_{k})\\
+ & =d_{W_{j}}J_{1}+\frac{1}{2}\lambda(dW_{j}\cdot W_{j}+W_{j}\cdot dW_{j})\\
+ & =\nabla_{W_{j}}J_{1}\cdot dW_{j}+\lambda W_{j}\cdot dW_{j}\\
+ & =(\nabla_{W_{j}}J_{1}+\lambda W_{j})\cdot dW_{j},
+\end{align*}
+
+\end_inset
+
+so the final equations are:
+\begin_inset Formula 
+\begin{alignat*}{2}
+\nabla_{Z_{L}}J & =\frac{1}{N}(Z_{L}-Y)\\
+\nabla_{Z_{j}}J & =S_{j+1}W_{j+1}^{T} &  & \qquad j=1,\ldots,L-1\\
+\nabla_{W_{j}}J & =Z_{j-1}^{T}S_{j}+\lambda W_{j} &  & \qquad j=1,\ldots,L\\
+\nabla_{b_{j}}J & =S_{j}^{T}\boldsymbol{1}, &  & \qquad j=1,\ldots,L
+\end{alignat*}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{alignat*}{2}
+S_{j} & =\nabla_{Z_{j}}J\odot f_{j}'(A_{j}) &  & \qquad j=1,\ldots,L
+\end{alignat*}
+
+\end_inset
+
+Note that only the gradients with respect to 
+\begin_inset Formula $W_{j}$
+\end_inset
+
+ can be influenced by the regularization.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Multi-Layer Fully-Connected Neural Network (Classification)
+\end_layout
+
+\begin_layout Standard
+This case is similar to the previous one, but we'll substitute the activation
+ of the last layer (i.e.
+ layer 
+\begin_inset Formula $L$
+\end_inset
+
+) with the 
+\emph on
+softmax function
+\emph default
+.
+ For the loss, we'll use the 
+\emph on
+Negative Log Likelihood
+\emph default
+, i.e.
+ the 
+\emph on
+Cross Entropy
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+For convenience, we'll assume that 
+\begin_inset Formula $Y$
+\end_inset
+
+ is a matrix whose rows are 
+\emph on
+one-hot
+\emph default
+ vectors specifying the 
+\emph on
+labels
+\emph default
+ for the corresponding 
+\emph on
+samples
+\emph default
+ in the 
+\emph on
+mini-batch
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+The previous section's equations for 
+\begin_inset Formula $Z_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $A_{j}$
+\end_inset
+
+ apply to this section too, with the exception of the one for 
+\begin_inset Formula $Z_{L}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+Z_{L}=s^{1}(A_{L}),\label{eq:Z_L_def}
+\end{equation}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+s(a)=\frac{e^{a}}{\boldsymbol{1}^{T}e^{a}}.
+\]
+
+\end_inset
+
+Note that 
+\begin_inset Formula $s$
+\end_inset
+
+, the softmax function, is applied to each row of 
+\begin_inset Formula $A_{L}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The equation for the loss becomes 
+\begin_inset Formula 
+\[
+J(W,b)=-\frac{1}{N}\ln(Z_{L})\cdot Y+\sum_{k}W_{k}\cdot W_{k}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's compute 
+\begin_inset Formula $d_{W_{L},b_{L},Z_{L-1}}J_{1}$
+\end_inset
+
+, where 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Formula $\oslash$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ is the element-wise division:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align}
+dJ_{1} & =-\frac{1}{N}d(\ln(Z_{L})\cdot Y)\nonumber \\
+ & =-\frac{1}{N}(d\ln(Z_{L}))\cdot Y\nonumber \\
+ & =-\frac{1}{N}((1\oslash Z_{L})\odot dZ_{L})\cdot Y\nonumber \\
+ & =-\frac{1}{N}((1\oslash Z_{L})\odot(\nabla s^{1}(A_{L})\myodot{1\overline{2}}{12}dA_{L}))\cdot Y\nonumber \\
+ & =(P\odot Q)\cdot Y={\color{blue}[PQ\overline{Y}]}={\color{blue}[PY]}\cdot Q=(P\odot Y)\cdot Q\nonumber \\
+ & =-\frac{1}{N}((1\oslash Z_{L})\odot Y)\cdot(\nabla s^{1}(A_{L})\myodot{1\overline{2}}{12}dA_{L})\nonumber \\
+ & =-\frac{1}{N}(Y\oslash Z_{L})\cdot(\nabla s^{1}(A_{L})\myodot{1\overline{2}}{12}dA_{L})\nonumber \\
+ & =-\frac{1}{N}(Y\oslash Z_{L})\cdot(\nabla s^{1}(A_{L})\myodot{1\overline{2}}{12}d(Z_{L-1}W_{L}+\boldsymbol{1}b_{L}^{T}))\nonumber \\
+ & =B\cdot(C\myodot{1\overline{2}}{12}D) &  & \text{(\ensuremath{C\in\mathbb{T}_{3}})}\nonumber \\
+ & =B\cdot{\color{blue}[C_{1}D_{1}][C_{2}\overline{D_{2}}]C_{3}}\nonumber \\
+ & ={\color{blue}[B_{1}C_{1}\overline{D_{1}}][C_{2}\overline{D_{2}}][\overline{B_{2}}C_{3}]}\nonumber \\
+ & ={\color{blue}[B_{1}C_{1}]C_{2}[\overline{B_{2}}C_{3}]}\cdot D\nonumber \\
+ & =(B\myodot{1\overline{2}}{13}C)\cdot D\nonumber \\
+ & =E\cdot d(Z_{L-1}W_{L}+\boldsymbol{1}b_{L}^{T})\label{eq:dJ1_wrt_AL_hard}\\
+ & =E\cdot(dZ_{L-1}W_{L}+Z_{L-1}dW_{L}+\boldsymbol{1}db_{L}^{T})\nonumber \\
+ & =E\cdot(dZ_{L-1}W_{L})+E\cdot(Z_{L-1}dW_{L})+E\cdot(\boldsymbol{1}db_{L}^{T})\nonumber \\
+ & =E\cdot(dZW)+E\cdot(ZdW)+E\cdot(\boldsymbol{1}db^{T})\nonumber \\
+ & =E\cdot{\color{blue}dZ_{1}[\overline{dZ_{2}}W_{1}]W_{2}}+E\cdot{\color{blue}Z_{1}[Z_{2}\overline{dW_{1}}]dW_{2}}+E\cdot{\color{blue}[1db]}\nonumber \\
+ & ={\color{blue}[E_{1}\overline{dZ_{1}}][\overline{dZ_{2}}W_{1}][\overline{E_{2}}W_{2}]}+{\color{blue}[\overline{E_{1}}Z_{1}][Z_{2}\overline{dW_{1}}][E_{2}\overline{dW_{2}}]}+{\color{blue}[\overline{E_{1}}1][E_{2}\overline{db}]}\nonumber \\
+ & ={\color{blue}E_{1}W_{1}[\overline{E_{2}}W_{2}]}\cdot dZ_{L-1}+{\color{blue}[\overline{E_{1}}Z_{1}]Z_{2}E_{2}}\cdot dW_{L}+{\color{blue}[\overline{E_{1}}1]E_{2}}\cdot db_{L}\nonumber \\
+ & ={\color{blue}E_{1}[\overline{E_{2}}W_{2}]W_{1}}\cdot dZ_{L-1}+{\color{blue}Z_{2}[Z_{1}\overline{E_{1}}]E_{2}}\cdot dW_{L}+{\color{blue}E_{2}[\overline{E_{1}}1]}\cdot db_{L}\nonumber \\
+ & =(EW_{L}^{T})\cdot dZ_{L-1}+(Z_{L-1}^{T}E)\cdot dW_{L}+(E^{T}\boldsymbol{1})\cdot db_{L}\label{eq:long_derivation_for_dJ1}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+The final formulas are thus
+\begin_inset Formula 
+\begin{alignat*}{2}
+\nabla_{W_{L}}J & =Z_{L-1}^{T}E+\lambda W_{L}\\
+\nabla_{b_{L}}J & =E^{T}\boldsymbol{1}\\
+\nabla_{Z_{L-1}}J & =EW_{L}^{T}\\
+\nabla_{Z_{j}}J & =S_{j+1}W_{j+1}^{T} &  & \qquad j=1,\ldots,L-2\\
+\nabla_{W_{j}}J & =Z_{j-1}^{T}S_{j}+\lambda W_{j} &  & \qquad j=1,\ldots,L-1\\
+\nabla_{b_{j}}J_{1} & =S_{j}^{T}\boldsymbol{1}, &  & \qquad j=1,\ldots,L-1
+\end{alignat*}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{align}
+E & =-\frac{1}{N}(Y\oslash Z_{L})\myodot{1\overline{2}}{13}\nabla s^{1}(A_{L})\label{eq:E_def}\\
+S_{j} & =\nabla_{Z_{j}}J\odot f_{j}'(A_{j}) &  & \qquad j=1,\ldots,L-1\nonumber 
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We've already computed 
+\begin_inset Formula $\nabla s$
+\end_inset
+
+ in subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:A-simple-example"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+An easier way
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:An-easier-way"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is one of the cases where generalization makes things harder rather
+ than simpler.
+ Since we know 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $s$
+\end_inset
+
+ is applied to each row of 
+\begin_inset Formula $A_{L}$
+\end_inset
+
+, we can simplify things by rewriting 
+\begin_inset Formula $J_{1}$
+\end_inset
+
+ as follows:
+\begin_inset Formula 
+\begin{equation}
+J_{1}=-\frac{1}{N}\sum_{i}\ln(s(a_{i}))\cdot y_{i}\label{eq:J1-easy-form}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $a_{i}^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $y_{i}^{T}$
+\end_inset
+
+ are the 
+\begin_inset Formula $i$
+\end_inset
+
+-th row of 
+\begin_inset Formula $A_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, respectively.
+ We can first compute 
+\begin_inset Formula $d_{a_{i}}J_{1}$
+\end_inset
+
+ and then determine 
+\begin_inset Formula $d_{A_{L}}J_{1}$
+\end_inset
+
+.
+ Let's proceed:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align}
+dJ_{1} & =-\frac{1}{N}\sum_{i}d\ln\left(\frac{e^{a_{i}}}{\boldsymbol{1}^{T}e^{a_{i}}}\right)\cdot y_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}d(a_{i}\ominus\ln(\boldsymbol{1}^{T}e^{a_{i}}))\cdot y_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}d(a_{i}-\boldsymbol{1}\ln(\boldsymbol{1}^{T}e^{a_{i}}))\cdot y_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}(da_{i}-\frac{\boldsymbol{1}}{\boldsymbol{1}^{T}e^{a_{i}}}\boldsymbol{1}^{T}(e^{a_{i}}\odot da_{i}))\cdot y_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}(da_{i}-\boldsymbol{1}\boldsymbol{1}^{T}(s(a_{i})\odot da_{i}))\cdot y_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}(da_{i}-\boldsymbol{1}(s(a_{i})\cdot da_{i}))\cdot y_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}(da_{i}\cdot y_{i}-s(a_{i})\cdot da_{i}) &  & \text{(\ensuremath{\sum_{j}y_{ij}=1})}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}(y_{i}-s(a_{i}))\cdot da_{i}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}[Y-s^{1}(A_{L})]_{i\cdot}\cdot[dA_{L}]_{i\cdot}\nonumber \\
+ & =-\frac{1}{N}\sum_{i}[(Y-s^{1}(A_{L}))\myodot{1\overline{2}}{12}dA_{L}]_{i}\label{eq:row_product}\\
+ & =-\frac{1}{N}(Y-Z_{L})\cdot dA_{L}\label{eq:dJ1_simple_complete}\\
+ & =E\cdot dA_{L}\label{eq:dJ1_wrt_AL_easy}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To understand expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:row_product"
+
+\end_inset
+
+, note that, in general, 
+\begin_inset Formula $U\myodot{1\overline{2}}{12}V$
+\end_inset
+
+ is the column vector whose 
+\begin_inset Formula $i$
+\end_inset
+
+-th 
+\begin_inset Quotes eld
+\end_inset
+
+row
+\begin_inset Quotes erd
+\end_inset
+
+ is the dot product between the 
+\begin_inset Formula $i$
+\end_inset
+
+-th rows of 
+\begin_inset Formula $U$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ Intuitively, we walk along the two dimensions of 
+\begin_inset Formula $U$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+ in parallel and multiply element-wise, but, in addition, we 
+\emph on
+sum 
+\emph default
+along the second dimension (i.e.
+ along the rows).
+\end_layout
+
+\begin_layout Standard
+Now note that expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:dJ1_wrt_AL_easy"
+
+\end_inset
+
+ is equivalent to expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:dJ1_wrt_AL_hard"
+
+\end_inset
+
+, so we ended up just simplifying (
+\emph on
+considerably
+\emph default
+!) 
+\begin_inset Formula $E$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let's try to verify that the two 
+\begin_inset Formula $E$
+\end_inset
+
+ are indeed equal, i.e.
+ that
+\begin_inset Formula 
+\[
+-\frac{1}{N}(Y-Z_{L})=-\frac{1}{N}(Y\oslash Z_{L})\myodot{1\overline{2}}{13}\nabla s^{1}(A_{L}).
+\]
+
+\end_inset
+
+We can simplify things by noting that 
+\begin_inset Formula $dA_{L}=\sum_{i}e_{i}da_{i}^{T}$
+\end_inset
+
+, where 
+\begin_inset Formula $a_{i}^{T}$
+\end_inset
+
+ is the 
+\begin_inset Formula $i$
+\end_inset
+
+-th row of 
+\begin_inset Formula $A_{L}$
+\end_inset
+
+.
+ For convenience, we'll surround 
+\begin_inset Quotes eld
+\end_inset
+
+classic notation
+\begin_inset Quotes erd
+\end_inset
+
+ terms inside bracket notation terms with 
+\emph on
+curly braces
+\emph default
+.
+ Let's proceed: 
+\begin_inset Formula 
+\begin{align*}
+ & ((Y\oslash Z_{L})\myodot{1\overline{2}}{13}\nabla s^{1}(A_{L}))\cdot dA_{L}=\\
+ & ((Y\oslash Z_{L})\myodot{1\overline{2}}{13}\nabla s^{1}(A_{L}))\cdot\sum_{i}e_{i}da_{i}^{T}=\\
+ & \sum_{i}((Y\oslash Z_{L})\myodot{1\overline{2}}{13}\nabla s^{1}(A_{L}))\cdot(e_{i}da_{i}^{T})=\\
+ & \sum_{i}(B\myodot{1\overline{2}}{13}C)\cdot e_{i}da_{i}^{T}=\\
+ & \sum_{i}(e_{i}\cdot_{1}(B\myodot{1\overline{2}}{13}C))\cdot da_{i}=\\
+ & \sum_{i}(B_{i\cdot}\myodot{\overline{1}}2C_{i\cdot\cdot})\cdot da_{i}= &  & \text{(\ensuremath{C\in\mathbb{T}_{3}})}\\
+ & \sum_{i}(C_{i\cdot\cdot}B_{i\cdot})\cdot da_{i}=\\
+ & \sum_{i}([\nabla s^{1}(A_{L})]_{i\cdot\cdot}[Y\oslash Z_{L}]_{i\cdot})\cdot da_{i}=\\
+ & \sum_{i}(\nabla s(a_{i})(y_{i}\oslash s(a_{i})))\cdot da_{i}=\\
+ & \sum_{i}([s\boldsymbol{1}^{T}\odot I-ss^{T}](y_{i}\oslash s))\cdot da_{i}= &  & \text{(see subsec.\,\ref{subsec:A-simple-example})}\\
+ & \sum_{i}(({\color{blue}[sI_{1}]I_{2}}-{\color{blue}ss})(y_{i}\oslash s))\cdot da_{i}=\\
+ & \sum_{i}({\color{blue}[sI_{1}][\overline{I_{2}}\{}y_{i}\oslash s{\color{blue}\}]}-{\color{blue}s[\overline{s}\{}y_{i}\oslash s{\color{blue}\}]})\cdot da_{i}=\\
+ & \sum_{i}({\color{blue}[sI_{1}][\overline{I_{2}}\{}y_{i}\oslash s{\color{blue}\}]}-{\color{blue}s[\overline{1}y_{i}]})\cdot da_{i}=\\
+ & \sum_{i}(s\odot{\color{blue}I_{1}[\overline{I_{2}}\{}y_{i}\oslash s{\color{blue}\}]}-s\boldsymbol{1}^{T}y_{i})\cdot da_{i}=\\
+ & \sum_{i}(s\odot(I(y_{i}\oslash s))-s)\cdot da_{i}= &  & \text{(\ensuremath{\sum_{j}y_{ij}=1})}\\
+ & \sum_{i}(y_{i}-s(a_{i}))\cdot da_{i}=\\
+ & \sum_{i}[Y-s^{1}(A_{L})]_{i\cdot}\cdot[dA_{L}]_{i\cdot}=\\
+ & \sum_{i}[(Y-s^{1}(A_{L}))\myodot{1\overline{2}}{12}dA_{L}]_{i}=\\
+ & (Y-Z_{L})\cdot dA_{L}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Recurrent Neural Network (RNN)
+\end_layout
+
+\begin_layout Standard
+In this subsection we'll consider an RNN described by the following equations:
+\begin_inset Formula 
+\begin{align*}
+A_{t} & =Z_{t-1}W+X_{t}U+\boldsymbol{1}b^{T} &  & \qquad t=1,\ldots,\tau\\
+Z_{t} & =\tanh(A_{t}) &  & \qquad t=1,\ldots,\tau\\
+O_{t} & =Z_{t}V+\boldsymbol{1}c^{T} &  & \qquad t=1,\ldots,\tau\\
+\hat{Y_{t}} & =s^{1}(O_{t}) &  & \qquad t=1,\ldots,\tau\\
+J_{t} & =-\frac{1}{N}\ln(\hat{Y}_{t})\cdot Y_{t} &  & \qquad t=1,\ldots,\tau\\
+J & =\sum_{t=1}^{\tau}J_{t}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula $Z_{0}$
+\end_inset
+
+ is an initial value and, as before, we assume that the mini-batch has size
+ 
+\begin_inset Formula $N$
+\end_inset
+
+.
+ This means that 
+\begin_inset Formula $X_{1},\ldots,X_{\tau}$
+\end_inset
+
+ represents 
+\begin_inset Formula $N$
+\end_inset
+
+ sequences.
+ In particular, the 
+\begin_inset Formula $i$
+\end_inset
+
+-th sequence is 
+\begin_inset Formula $X_{1i\cdot},\ldots,X_{\tau i\cdot}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To simplify things, we'll rewrite 
+\begin_inset Formula $J_{t}$
+\end_inset
+
+ as in subsection
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:An-easier-way"
+
+\end_inset
+
+ and we'll pretend that we're dealing with different parameters at each
+ time step:
+\begin_inset Formula 
+\begin{align}
+A_{t} & =Z_{t-1}W_{t}+X_{t}U_{t}+\boldsymbol{1}b_{t}^{T} &  & \qquad t=1,\ldots,\tau\nonumber \\
+Z_{t} & =\tanh(A_{t}) &  & \qquad t=1,\ldots,\tau\nonumber \\
+O_{t} & =Z_{t}V_{t}+\boldsymbol{1}c_{t}^{T} &  & \qquad t=1,\ldots,\tau\nonumber \\
+J_{t} & =-\frac{1}{N}\sum_{i}\ln(s(O_{ti\cdot}))\cdot Y_{ti\cdot} &  & \qquad t=1,\ldots,\tau\nonumber \\
+J & =\sum_{t=1}^{\tau}J_{t}\label{eq:J_tot}
+\end{align}
+
+\end_inset
+
+Then, it's a matter of realizing that, for instance, 
+\begin_inset Formula $\nabla_{W}J=\sum_{t=1}^{\tau}\nabla_{W_{t}}J$
+\end_inset
+
+.
+ To see this, consider the following 
+\emph on
+backpropagation graph
+\emph default
+, where 
+\begin_inset Formula $W_{t}=\mathrm{id}(W)=W$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Preview
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+preview true
+filename "graph_params_trick.tex"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To see how we should compute the gradients of our parameters, let's have
+ a look at the computation graph for the RNN:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Preview
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+preview true
+filename "graph_rnn.tex"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Note that we omitted 
+\begin_inset Formula $Z_{t}$
+\end_inset
+
+ (except for 
+\begin_inset Formula $Z_{0}$
+\end_inset
+
+) in the graph, which is equivalent to replacing 
+\begin_inset Formula $Z_{t}$
+\end_inset
+
+ with its definition (
+\begin_inset Formula $\tanh(A_{t})$
+\end_inset
+
+) in every other definition.
+\end_layout
+
+\begin_layout Standard
+To avoid unnecessary computations, we'll compute 
+\begin_inset Formula $\nabla_{A_{t}}J$
+\end_inset
+
+ from 
+\begin_inset Formula $\nabla_{A_{t+1}}J$
+\end_inset
+
+ and 
+\begin_inset Formula $\nabla_{O_{t}}J$
+\end_inset
+
+.
+ Then computing the gradients with respect to the parameters won't be a
+ problem.
+ Let's do it:
+\begin_inset Formula 
+\begin{align}
+d_{A_{t}}J & =\nabla_{A_{t+1}}J\cdot dA_{t+1}+\nabla_{O_{t}}J\cdot dO_{t}\label{eq:first_line}
+\end{align}
+
+\end_inset
+
+Before proceeding, note that equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:first_line"
+
+\end_inset
+
+ is exactly what we'd find if we computed 
+\begin_inset Formula $d_{A_{t}}J$
+\end_inset
+
+ starting from equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:J_tot"
+
+\end_inset
+
+, ignoring irrelevant variables and stopping at 
+\begin_inset Formula $dA_{t+1}$
+\end_inset
+
+ and 
+\begin_inset Formula $dO_{t}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We can consider the two addends of equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:first_line"
+
+\end_inset
+
+ separately.
+ Let's write 
+\begin_inset Formula $J^{(1)}$
+\end_inset
+
+ to indicate that we're only considering the first term of equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:first_line"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align}
+d_{A_{t}}J^{(1)} & =\nabla_{A_{t+1}}J\cdot dA_{t+1}\nonumber \\
+ & =G\cdot dA_{t+1}\nonumber \\
+ & =G\cdot d(Z_{t}W_{t+1}+X_{t+1}U_{t+1}+\boldsymbol{1}b_{t+1}^{T})\nonumber \\
+ & =G\cdot(dZ_{t}W_{t+1})\label{eq:analogous_line_1}\\
+ & =G\cdot(d\tanh(A_{t})W_{t+1})\nonumber \\
+ & =G\cdot((\tanh'(A_{t})\odot dA_{t})W_{t+1})\nonumber \\
+ & =G\cdot(((\boldsymbol{1}\boldsymbol{1}^{T}-\tanh^{2}(A_{t}))\odot dA_{t})W_{t+1})\nonumber \\
+ & =G\cdot((B\odot D)W)\nonumber \\
+ & =G\cdot{\color{blue}[B_{1}D_{1}][B_{2}\overline{D_{2}}W_{1}]W_{2}}\nonumber \\
+ & ={\color{blue}[G_{1}B_{1}\overline{D_{1}}][B_{2}\overline{D_{2}}W_{1}][\overline{G_{2}}W_{2}]}\nonumber \\
+ & ={\color{blue}[G_{1}B_{1}][B_{2}W_{1}][\overline{G_{2}}W_{2}]}\cdot D\label{eq:tricky_bracket_notation}
+\end{align}
+
+\end_inset
+
+The bracket notation term in expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:tricky_bracket_notation"
+
+\end_inset
+
+ may seem a little tricky, so maybe a graph will help:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Preview
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+preview true
+filename "graph_bracket_notation.tex"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Edges indicate the product of dimensions and the labels indicate which dimension
+s are being multiplied and, optionally, summed over (each label refers to
+ the nearest node).
+ Note that there's an information missing in the graph above: the fact that
+ 
+\begin_inset Formula ${\color{blue}[G_{1}B_{1}]}$
+\end_inset
+
+ comes before 
+\begin_inset Formula ${\color{blue}[B_{2}W_{1}]}$
+\end_inset
+
+.
+ I imagine we could come up with some smart way to represent this in the
+ graph (maybe with arrows between edges?) and even define a full-fledged
+ 
+\emph on
+graphical tensor differential calculus
+\emph default
+, but that's for another time!
+\end_layout
+
+\begin_layout Standard
+We can find a neat expression for our bracket term by manipulating the graph
+ above:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Preview
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+preview true
+filename "graph_bracket_notation_2.tex"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In retrospect, we should have seen it, but I thought this was a good opportunity
+ to see how bracket notation might look like in graphical form.
+ Indeed, we can take 
+\begin_inset Formula $B$
+\end_inset
+
+ out right from the start:
+\begin_inset Formula 
+\begin{align*}
+ & {\color{blue}[G_{1}B_{1}][B_{2}W_{1}][\overline{G_{2}}W_{2}]}=\\
+ & B\odot{\color{blue}G_{1}W_{1}[\overline{G_{2}}W_{2}]}=\\
+ & B\odot{\color{blue}G_{1}[\overline{G_{2}}W_{2}]W_{1}}=\\
+ & B\odot(GW^{T})
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we can continue from where we left off:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d_{A_{t}}J^{(1)} & =\nabla_{A_{t+1}}J\cdot dA_{t+1}\\
+ & =G\cdot dA_{t+1}\\
+ & =\cdots\\
+ & =G\cdot(((\boldsymbol{11}^{T}-\tanh^{2}(A_{t}))\odot dA_{t})W_{t+1})\\
+ & =G\cdot((B\odot D)W)\\
+ & =\cdots\\
+ & ={\color{blue}[G_{1}B_{1}][B_{2}W_{1}][\overline{G_{2}}W_{2}]}\cdot D\\
+ & =(B\odot(GW^{T}))\cdot D\\
+ & =((\boldsymbol{11}^{T}-\tanh^{2}(A_{t}))\odot(\nabla_{A_{t+1}}JW_{t+1}^{T}))\cdot dA_{t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+Let's do the same with the second addend of equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:first_line"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align}
+d_{A_{t}}J^{(2)} & =\nabla_{O_{t}}J\cdot dO_{t}\nonumber \\
+ & =H\cdot dO_{t}\nonumber \\
+ & =H\cdot d(Z_{t}V_{t}+\boldsymbol{1}c_{t}^{T})\nonumber \\
+ & =H\cdot(dZ_{t}V_{t})\label{eq:analogous_line_2}
+\end{align}
+
+\end_inset
+
+We stopped because expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:analogous_line_2"
+
+\end_inset
+
+ has the same form of expression
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:analogous_line_1"
+
+\end_inset
+
+, so we can conclude that
+\begin_inset Formula 
+\begin{align*}
+d_{A_{t}}J^{(2)} & =(B\odot(HV^{T}))\cdot D\\
+ & =((\boldsymbol{11}^{T}-\tanh^{2}(A_{t}))\odot(\nabla_{O_{t}}JV_{t}^{T}))\cdot dA_{t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In conclusion, we get
+\begin_inset Formula 
+\begin{align*}
+d_{A_{t}}J & =[B\odot(GW^{T})+B\odot(HV^{T})]\cdot D\\
+ & =[B\odot(GW^{T}+HV^{T})]\cdot D\\
+ & =[(\boldsymbol{11}^{T}-\tanh^{2}(A_{t}))\odot(\nabla_{A_{t+1}}JW_{t+1}^{T}+\nabla_{O_{t}}JV_{t}^{T})]\cdot dA_{t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let's determine 
+\begin_inset Formula $d_{O_{t}}J$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+d_{O_{t}}J & =d_{O_{t}}\sum_{t=1}^{\tau}J_{t}=d_{O_{t}}J_{t}
+\end{align*}
+
+\end_inset
+
+Note that 
+\begin_inset Formula $J_{t}$
+\end_inset
+
+ has the same form of 
+\begin_inset Formula $J_{1}$
+\end_inset
+
+ as by definition
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:J1-easy-form"
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{align*}
+J_{t} & =-\frac{1}{N}\sum_{i}\ln(s(O_{ti\cdot}))\cdot Y_{ti\cdot}\\
+J_{1} & =-\frac{1}{N}\sum_{i}\ln(s(a_{i}))\cdot y_{i}
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $O_{t}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y_{t}$
+\end_inset
+
+ correspond to 
+\begin_inset Formula $A_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, respectively.
+ Remember that 
+\begin_inset Formula $a_{i}^{T}$
+\end_inset
+
+ and 
+\begin_inset Formula $y_{i}^{T}$
+\end_inset
+
+ are the 
+\begin_inset Formula $i$
+\end_inset
+
+-th rows of 
+\begin_inset Formula $A_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+, respectively.
+\end_layout
+
+\begin_layout Standard
+This means that from
+\begin_inset Formula 
+\begin{align*}
+dJ_{1} & =-\frac{1}{N}(Y-Z_{L})\cdot dA_{L} &  & \qquad\qquad\text{(see expr. \ref{eq:dJ1_simple_complete})}\\
+ & =-\frac{1}{N}(Y-s^{1}(A_{L}))\cdot dA_{L} &  & \qquad\qquad\text{(for def. \ref{eq:Z_L_def})}
+\end{align*}
+
+\end_inset
+
+we get
+\begin_inset Formula 
+\begin{align*}
+d_{O_{t}}J & =d_{O_{t}}J_{t}=-\frac{1}{N}(Y_{t}-s^{1}(O_{t}))\cdot dO_{t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+All is left to do is to compute the gradients of the parameters:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+d_{W_{t},U_{t},b_{t}}J & =\nabla_{A_{t}}J\cdot dA_{t}\\
+ & =G\cdot dA_{t}\\
+ & =G\cdot d(Z_{t-1}W_{t}+X_{t}U_{t}+\boldsymbol{1}b_{t}^{T})\\
+ & =G\cdot(Z_{t-1}dW_{t})+G\cdot(X_{t}dU_{t})+G\cdot(\boldsymbol{1}db_{t}^{T})\\
+d_{V_{t},c_{t}}J & =\nabla_{O_{t}}J\cdot dO_{t}\\
+ & =H\cdot dO_{t}\\
+ & =H\cdot d(Z_{t}V_{t}+\boldsymbol{1}c_{t}^{T})\\
+ & =H\cdot(Z_{t}dV_{t})+H\cdot(\boldsymbol{1}dc_{t}^{T})
+\end{align*}
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+We have already done these derivations before (with different terms), but
+ let's do them again for the exercise.
+ Here's the derivation for the first form:
+\begin_inset Formula 
+\begin{align*}
+ & A\cdot(BD)=\\
+ & A\cdot{\color{blue}B_{1}[B_{2}\overline{D_{1}}]D_{2}}=\\
+ & {\color{blue}[\overline{A_{1}}B_{1}][B_{2}\overline{D_{1}}][A_{2}\overline{D_{2}}]}=\\
+ & {\color{blue}[\overline{A_{1}}B_{1}]B_{2}A_{2}}\cdot D=\\
+ & {\color{blue}B_{2}[B_{1}\overline{A_{1}}]A_{2}}\cdot D=\\
+ & (B^{T}A)\cdot D
+\end{align*}
+
+\end_inset
+
+And here's the derivation for the second form:
+\begin_inset Formula 
+\begin{align*}
+ & A\cdot(\boldsymbol{1}d^{T})=\\
+ & A\cdot{\color{blue}1d}=\\
+ & {\color{blue}[\overline{A_{1}}1][A_{2}\overline{d}]}=\\
+ & {\color{blue}\overline{A_{1}}[A_{2}\overline{d}]}=\\
+ & {\color{blue}\overline{A_{1}}A_{2}}\cdot d=\\
+ & {\color{blue}A_{2}[\overline{A_{1}}1]}\cdot d=\\
+ & (A^{T}\boldsymbol{1})\cdot d
+\end{align*}
+
+\end_inset
+
+I'm being very thorough here for didactic reasons, but feel free to skip
+ any steps you consider unnecessary in your derivations.
+\end_layout
+
+\begin_layout Standard
+Now we can complete our derivations:
+\begin_inset Formula 
+\begin{align*}
+d_{W_{t},U_{t},b_{t}}J & =(Z_{t-1}^{T}\nabla_{A_{t}}J)\cdot dW_{t}+(X_{t}^{T}\nabla_{A_{t}}J)\cdot dU_{t}+(\nabla_{A_{t}}J^{T}\boldsymbol{1})\cdot db_{t}\\
+d_{V_{t},c_{t}}J & =(Z_{t}^{T}\nabla_{O_{t}}J)\cdot dV_{t}+(\nabla_{O_{t}}J^{T}\boldsymbol{1})\cdot dc_{t}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The final equations are thus:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\nabla_{A_{\tau+1}}J & =0\\
+\nabla_{O_{t}}J & =-\frac{1}{N}(Y_{t}-s^{1}(O_{t})) &  & \qquad t=1,\ldots,\tau\\
+\nabla_{A_{t}}J & =(\boldsymbol{11}^{T}-\tanh^{2}(A_{t}))\odot(\nabla_{A_{t+1}}JW_{t+1}^{T}+\nabla_{O_{t}}JV_{t}^{T}) &  & \qquad t=1,\ldots,\tau\\
+\nabla_{W}J & =\sum_{t=1}^{\tau}Z_{t-1}^{T}\nabla_{A_{t}}J\\
+\nabla_{U}J & =\sum_{t=1}^{\tau}X_{t}^{T}\nabla_{A_{t}}J\\
+\nabla_{b}J & =\sum_{t=1}^{\tau}\nabla_{A_{t}}J^{T}\boldsymbol{1}\\
+\nabla_{V}J & =\sum_{t=1}^{\tau}Z_{t}^{T}\nabla_{O_{t}}J\\
+\nabla_{c}J & =\sum_{t=1}^{\tau}\nabla_{O_{t}}J^{T}\boldsymbol{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks[0]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "pollock,magnus-neudecker,wikipedia,my_papers"
+options "plainnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
